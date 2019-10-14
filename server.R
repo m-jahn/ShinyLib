@@ -11,11 +11,32 @@ server <- function(input, output) {
     # read user selected data set
     load(input$UserDataChoice)
     # optionally filter columns by a set of allowed regular expressions
-    data %>% ungroup %>% 
-      filter(condition == "L300", timepoint == 8, induction == "i") %>%
-      #slice(1:100) %>% 
-      as.data.frame
+    data %>% ungroup %>% as.data.frame
   })
+  
+  
+  # DYNAMIC BOXES FOR DATA FILTERING
+  output$FilterCond <- renderUI({
+    selectInput("UserDataFilterCond",
+      "Condition:", unique(data()$condition), 
+      selected = unique(data()$condition[1]),
+      multiple = TRUE)
+  })
+  
+  output$FilterTime <- renderUI({
+    selectInput("UserDataFilterTime",
+      "Time point:", unique(data()$timepoint), 
+      selected = unique(data()$timepoint),
+      multiple = TRUE)
+  })
+  
+  output$FilterInd <- renderUI({
+    selectInput("UserDataFilterInd",
+      "Induction:", unique(data()$induction), 
+      selected = unique(data()$induction),
+      multiple = TRUE)
+  })
+  
   
   # SOME GLOBAL FUNCTIONS THAT ALL PLOTS USE
   # filter data by user choices

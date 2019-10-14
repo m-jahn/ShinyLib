@@ -58,22 +58,13 @@ ui <- navbarPage(
         # select additional filters
         fluidRow(
           column(width = 4, 
-            selectInput("UserDataFilterCond",
-              "Condition:", unique(data$condition), 
-              selected = unique(data$condition)[1],
-              multiple = TRUE)
+            uiOutput("FilterCond")
           ),
           column(width = 4,
-            selectInput("UserDataFilterTime",
-              "Time point:", unique(data$timepoint), 
-              selected = unique(data$timepoint),
-              multiple = TRUE)
+            uiOutput("FilterTime")
           ),
           column(width = 4,
-            selectInput("UserDataFilterInd",
-              "Induction:", unique(data$induction), 
-              selected = unique(data$induction),
-              multiple = TRUE)
+            uiOutput("FilterInd")
           )
         ),
         
