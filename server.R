@@ -10,8 +10,21 @@ server <- function(input, output) {
     
     # read user selected data set
     load(input$UserDataChoice)
-    # optionally filter columns by a set of allowed regular expressions
+    # coerce to base data.frame
     data %>% ungroup %>% as.data.frame
+  })
+  
+  # GENERIC DATA FILTERING
+  data_filt <- reactive({
+    
+    # filter data set
+    data() %>% filter(
+      Gene.names %in% filtGenes(),
+      condition %in% input$UserDataFilterCond,
+      timepoint %in% input$UserDataFilterTime,
+      induction %in% input$UserDataFilterInd
+    )
+  
   })
   
   
@@ -63,8 +76,8 @@ server <- function(input, output) {
   # select theme
   theme <- reactive({
     if (input$UserTheme == "ggplot1") ggplot2like()
-    else if (input$UserTheme == "ggplot2") custom.ggplot
-    else if (input$UserTheme == "lattice grey") custom.lattice
+    else if (input$UserTheme == "ggplot2") custom.ggplot()
+    else if (input$UserTheme == "lattice grey") custom.lattice()
     else if (input$UserTheme == "lattice blue") theEconomist.theme()
   })
   
@@ -111,35 +124,78 @@ server <- function(input, output) {
   
    
   # PLOT AND TABLE UI OUTPUTS
-  #
+  # ***********************************************
   # To control size of the plots, we need to wrap plots
   # into additional renderUI function that can take height argument
   output$table.ui <- renderUI({
     tableOutput("table")
   })
+  output$lineplot.ui <- renderUI({
+    plotOutput("lineplot", height = input$UserPrintHeight, width = input$UserPrintWidth)
+  })
   
   
+  # LINE PLOT OF DEPLETION / ENRICHMENT
+  # ***********************************************
+  output$lineplot <- renderPlot(res = 120, {
+    
+    # plot of gene expression is drawn
+    plot <- xyplot(logfun(get(input$UserYVariable)) ~ 
+        factor(get(input$UserXVariable)) | 
+        factor(get(input$UserCondVariable)),
+      data_filt(),
+      groups = {
+        if (input$UserGrouping == "none") NULL
+        else if(input$UserGrouping == "by conditioning") get(input$UserCondVariable)
+        else if(input$UserGrouping == "by X variable") get(input$UserXVariable)
+        else if(input$UserGrouping == "by Y variable") {
+          get(input$UserYVariable) %>% logfun %>%
+          .bincode(., pretty(.))
+        }
+      },
+      auto.key = FALSE, type = type(), 
+      par.settings = theme(),
+      layout = {
+        if (input$UserPanelLayout == "manual") {
+        c(input$UserPanelLayoutCols, input$UserPanelLayoutRows)}
+        else NULL},
+      as.table = TRUE,
+      scales = list(alternating = FALSE, x = list(rot = 45)),
+      xlab = input$UserXVariable,
+      ylab = paste0(input$UserYVariable, " (", input$UserLogY, ")"),
+      panel = function(x, y, ...) {
+        if (input$UserTheme == "ggplot2")
+          panel.grid(h = -1, v = -1, col = "white")
+        else
+          panel.grid(h = -1, v = -1, col = grey(0.9))
+        panel.xyplot(x, y, ...)
+      }
+    )
+    
+    # print plot to output panel
+    print(plot)
+    # download function
+    output$UserDownloadDotplot <- getDownload(filename = "boxplot.svg", plot = plot)
   
+  })
+  
+  
+  # RENDER TABLE WITH QUANTITIES OF SELECTED PROTEINS
+  # ***********************************************
   output$table <- renderTable(digits = 4, {
-    
-    # RENDER TABLE WITH QUANTITIES OF SELECTED PROTEINS
-    # ***********************************************
-    
-    # filter data by user choices
-    data <- subset(data(), Gene.names %in% filtGenes())
     
     # download handler for table
     output$UserDownloadTable <- downloadHandler(
       filename = "data.csv",
       content = function(file) {
-        write.csv(data, file)
+        write.csv(data_filt(), file)
       },
       contentType = "text/csv"
     )
     
     # call table to be rendered
-    data
+    data_filt()
     
-    })
+  })
   
 }

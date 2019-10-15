@@ -14,7 +14,7 @@ library(dendextend)
 # LOADING EXTERNAL FUNCTIONS AND DATA
 # ***********************************************
 for (Rfile in list.files(
-  pattern = "(functions|themes|box)\\.R$", full.names = TRUE)) {
+  pattern = "(functions|theme|box)\\.R$", full.names = TRUE)) {
   source(Rfile)
 }
 
@@ -108,22 +108,21 @@ ui <- navbarPage(
           # FACTORIZATION AND ORDERING OPTIONS
           column(width = 4, 
             selectInput("UserXVariable", 
-              "X variable:", choices = c("protein","condition","growthrate",
-                "psortB_localization","Process","Pathway","Protein"),
-              selected = "condition")
+              "X variable:", choices = list("timepoint", "generations", "condition", 
+                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
+              selected = "timepoint")
           ),
           column(width = 4, 
             selectInput("UserYVariable", 
-              "Y variable:", choices = list("rel_intensity", "mean_intensity", "median_intensity", 
-                  "mean_mass_fraction_norm", "mass_g_per_gDCW", "mol_fraction", "conc_g_per_L_cell_vol",
-                  "conc_mol_per_cell", "conc_mol_per_L_cell_vol", "conc_copies_per_cell"),
-              selected = "rel_intensity")
+              "Y variable:", choices = list("FoldChange", "fitness_score", 
+                "baseMean", "padj"),
+              selected = "FoldChange")
           ),
           column(width = 4, 
             selectInput("UserCondVariable", 
-              "Conditioning variable:", choices = list("protein","condition","growthrate",
-                "psortB_localization","Process","Pathway","Protein"),
-              selected = "protein")
+              "Conditioning variable:", choices = list("timepoint", "generations", "condition", 
+                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
+              selected = "sgRNA_short")
           )
         ),
         
@@ -137,7 +136,8 @@ ui <- navbarPage(
           ),
           column(width = 3, 
             selectInput("UserGrouping", 
-              "Color coding:", choices = list("none", "by conditioning", "by X variable", "by Y variable"),
+              "Color coding:", choices = list("none", "by conditioning", "by X variable", 
+                "by Y variable"),
               selected = "by conditioning")
           ),
           column(width = 3, 
@@ -174,9 +174,9 @@ ui <- navbarPage(
       column(width = 7,
         wellPanel(
           tabsetPanel(
-            #tabPanel("DOT PLOT", uiOutput("dotplot.ui"),
-            #  downloadButton("UserDownloadDotplot", "Download svg")
-            #),
+            tabPanel("DEPLETION / ENRICHMENT", uiOutput("lineplot.ui"),
+              downloadButton("UserDownloadLineplot", "Download svg")
+            ),
             #tabPanel("BOX PLOT", uiOutput("barchart.ui"),
             #  downloadButton("UserDownloadBoxplot", "Download svg")
             #),
