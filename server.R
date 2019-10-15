@@ -143,32 +143,41 @@ server <- function(input, output) {
     plot <- xyplot(logfun(get(input$UserYVariable)) ~ 
         factor(get(input$UserXVariable)) | 
         factor(get(input$UserCondVariable)),
-      data_filt(),
+        data_filt(),
       groups = {
         if (input$UserGrouping == "none") NULL
-        else if(input$UserGrouping == "by conditioning") get(input$UserCondVariable)
+        else if(input$UserGrouping == "by cond. variable") get(input$UserCondVariable)
         else if(input$UserGrouping == "by X variable") get(input$UserXVariable)
         else if(input$UserGrouping == "by Y variable") {
           get(input$UserYVariable) %>% logfun %>%
           .bincode(., pretty(.))
-        }
+        } else get(gsub("by ", "", input$UserGrouping))
       },
-      auto.key = FALSE, type = type(), 
+      auto.key = list(columns = 4), 
       par.settings = theme(),
       layout = {
         if (input$UserPanelLayout == "manual") {
         c(input$UserPanelLayoutCols, input$UserPanelLayoutRows)}
         else NULL},
-      as.table = TRUE,
+      as.table = TRUE, type = "l",
       scales = list(alternating = FALSE, x = list(rot = 45)),
       xlab = input$UserXVariable,
       ylab = paste0(input$UserYVariable, " (", input$UserLogY, ")"),
-      panel = function(x, y, ...) {
+      panel = function(x, y, subscripts, groups, ...) {
         if (input$UserTheme == "ggplot2")
           panel.grid(h = -1, v = -1, col = "white")
         else
           panel.grid(h = -1, v = -1, col = grey(0.9))
-        panel.xyplot(x, y, ...)
+        if (type() %in% c("p", "b")) {
+          panel.xyplot(x, y, subscripts = subscripts, groups = groups, type = "p")
+        }
+        panel.superpose(x, y, subscripts = subscripts, groups = groups, ...)
+      }, panel.groups = function(x, y, ...) {
+        if (type() %in% c("l", "b")) {
+          panel.xyplot(
+            unique(x), 
+            tapply(y, x, function(x) mean(x, na.rm = TRUE)), ...)
+        }
       }
     )
     

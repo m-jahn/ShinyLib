@@ -136,14 +136,14 @@ ui <- navbarPage(
           ),
           column(width = 3, 
             selectInput("UserGrouping", 
-              "Color coding:", choices = list("none", "by conditioning", "by X variable", 
-                "by Y variable"),
-              selected = "by conditioning")
+              "Color coding:", choices = list("none", "by cond. variable", "by X variable", 
+                "by Y variable", "by condition", "by induction"),
+              selected = "by induction")
           ),
           column(width = 3, 
             selectInput("UserPlotType", 
               "Plot type:", choices = list("points", "lines", "points and lines"),
-              selected = "points")
+              selected = "points and lines")
           ),
           column(width = 3, 
             selectInput("UserLogY", 
