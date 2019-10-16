@@ -13,7 +13,7 @@ library(dendextend)
 
 # LOADING EXTERNAL FUNCTIONS AND DATA
 # ***********************************************
-for (Rfile in list.files(
+for (Rfile in list.files("R",
   pattern = "(functions|theme|box)\\.R$", full.names = TRUE)) {
   source(Rfile)
 }

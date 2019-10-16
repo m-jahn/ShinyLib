@@ -163,19 +163,15 @@ server <- function(input, output) {
       scales = list(alternating = FALSE, x = list(rot = 45)),
       xlab = input$UserXVariable,
       ylab = paste0(input$UserYVariable, " (", input$UserLogY, ")"),
-      panel = function(x, y, subscripts, groups, ...) {
-        if (input$UserTheme == "ggplot2")
-          panel.grid(h = -1, v = -1, col = "white")
-        else
-          panel.grid(h = -1, v = -1, col = grey(0.9))
-        if (type() %in% c("p", "b")) {
+      panel = function(x, y, subscripts = NULL, groups = NULL, ...) {
+        panel.grid(h = -1, v = -1, 
+          col = ifelse(input$UserTheme == "ggplot2", "white", grey(0.9)))
+        if (type() %in% c("p", "b"))
           panel.xyplot(x, y, subscripts = subscripts, groups = groups, type = "p")
-        }
         panel.superpose(x, y, subscripts = subscripts, groups = groups, ...)
       }, panel.groups = function(x, y, ...) {
         if (type() %in% c("l", "b")) {
-          panel.xyplot(
-            unique(x), 
+          panel.xyplot(unique(x), 
             tapply(y, x, function(x) mean(x, na.rm = TRUE)), ...)
         }
       }
