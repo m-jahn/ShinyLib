@@ -5,26 +5,33 @@ plot_dotplot <- function(
   logfun, theme, layout, type, input
 ) {
   
-  # in the rare case we condition by Y variable
-  # we have to add a binned pseudo Y variable
-  if (cond_var == input$UserYVariable) {
-    binned_Y <- data[[cond_var]] %>% logfun %>% .bincode(., pretty(.))
-    cond_var <- "binned_Y"
-  } 
+  
+  if (!is.null(groups)) {
+    
+    # in the rare case we group by Y variable
+    # we have to add a binned pseudo Y variable
+    if (groups == input$UserYVariable) {
+      data <- mutate(data,
+        binned_Y = get(groups) %>% logfun %>% .bincode(., pretty(.)))
+      groups <- "binned_Y"
+    }
+    
+    # determine number of columns for group legend
+    if (length(unique(data[[groups]])) <= 10) {
+      ncol_legend <- length(unique(data[[groups]])) %>%
+        replace(., . > 4, 4)
+    } else {
+      ncol_legend <- NULL
+    }
+    
+  } else {
+    ncol_legend <- NULL
+  }
   
   # rotate X scale if too long
   rot_X_label <- ifelse(
     median(nchar(data[[x]]), na.rm = TRUE) >= 4, 35, 0
   )
-  
-  # determine number of columns for group legend
-  if (!is.null(groups) & length(unique(data[[groups]])) <= 10) {
-    ncol_legend <- length(unique(data[[groups]])) %>%
-      replace(., . > 4, 4)
-  } else {
-    ncol_legend <- NULL
-  }
-  
   
   # make dot plot
   xyplot(

@@ -24,10 +24,11 @@ plot_heatmap <- function(
     # in the rare case we condition by Y variable
     # we have to add a binned pseudo Y variable
     if (cond_var == input$UserYVariable) {
-      binned_Y <- data[[cond_var]] %>% logfun %>% .bincode(., pretty(.))
+      data <- mutate(data,
+        binned_Y = get(cond_var) %>% logfun %>% .bincode(., pretty(.)))
       cond_var <- "binned_Y"
-    } 
-      
+    }
+    
     # plot heat map with conditioning
     levelplot(
       logfun(get(z)) ~ factor(get(x)) * factor(get(y)) | factor(get(cond_var)),
