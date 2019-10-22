@@ -13,8 +13,7 @@ library(dendextend)
 
 # LOADING EXTERNAL FUNCTIONS AND DATA
 # ***********************************************
-for (Rfile in list.files("R",
-  pattern = "(functions|theme|box)\\.R$", full.names = TRUE)) {
+for (Rfile in list.files("R", full.names = TRUE)) {
   source(Rfile)
 }
 
@@ -136,7 +135,7 @@ ui <- navbarPage(
           ),
           column(width = 3, 
             selectInput("UserGrouping", 
-              "Color coding:", choices = list("none", "by cond. variable", "by X variable", 
+              "Grouping:", choices = list("none", "by cond. variable", "by X variable", 
                 "by Y variable", "by condition", "by induction"),
               selected = "by induction")
           ),
@@ -174,18 +173,12 @@ ui <- navbarPage(
       column(width = 7,
         wellPanel(
           tabsetPanel(
-            tabPanel("DEPLETION / ENRICHMENT", uiOutput("lineplot.ui"),
-              downloadButton("UserDownloadLineplot", "Download svg")
+            tabPanel("DEPLETION / ENRICHMENT", uiOutput("dotplot.ui"),
+              downloadButton("UserDownloadDotplot", "Download svg")
             ),
-            #tabPanel("BOX PLOT", uiOutput("barchart.ui"),
-            #  downloadButton("UserDownloadBoxplot", "Download svg")
-            #),
-            #tabPanel("VIOLIN PLOT", uiOutput("violinplot.ui"),
-            #  downloadButton("UserDownloadViolinplot", "Download svg")
-            #),
-            #tabPanel("HEAT MAP", uiOutput("heatmap.ui"),
-            #  downloadButton("UserDownloadHeat", "Download svg")
-            #),
+            tabPanel("HEAT MAP", uiOutput("heatmap.ui"),
+              downloadButton("UserDownloadHeat", "Download svg")
+            ),
             #tabPanel("CLUSTERING", uiOutput("clustering.ui"),
             #  numericInput("UserNClust", label = "N cluster", value = 4, step = 1)
             #),

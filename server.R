@@ -81,6 +81,23 @@ server <- function(input, output) {
     else if (input$UserTheme == "lattice blue") theEconomist.theme()
   })
   
+  # select layout
+  layout <- reactive({
+    if (input$UserPanelLayout == "manual") {
+      c(input$UserPanelLayoutCols, input$UserPanelLayoutRows)}
+    else NULL
+  })
+  
+  # select grouping variable
+  grouping <- reactive({
+    if (input$UserGrouping == "none") NULL
+    else if(input$UserGrouping == "by cond. variable") input$UserCondVariable
+    else if(input$UserGrouping == "by X variable") input$UserXVariable
+    else if(input$UserGrouping == "by Y variable") input$UserYVariable
+    else gsub("by ", "", input$UserGrouping)
+  })
+  
+  
   # generic download handler for all download buttons
   getDownload <- function(filename, plot) {
     downloadHandler(
@@ -130,58 +147,61 @@ server <- function(input, output) {
   output$table.ui <- renderUI({
     tableOutput("table")
   })
-  output$lineplot.ui <- renderUI({
-    plotOutput("lineplot", height = input$UserPrintHeight, width = input$UserPrintWidth)
+  output$dotplot.ui <- renderUI({
+    plotOutput("dotplot", height = input$UserPrintHeight, width = input$UserPrintWidth)
+  })
+  output$heatmap.ui <- renderUI({
+    plotOutput("heatmap", height = input$UserPrintHeight, width = input$UserPrintWidth)
   })
   
   
-  # LINE PLOT OF DEPLETION / ENRICHMENT
+  # DOT PLOT OF DEPLETION / ENRICHMENT
   # ***********************************************
-  output$lineplot <- renderPlot(res = 120, {
+  output$dotplot <- renderPlot(res = 120, {
     
-    # plot of gene expression is drawn
-    plot <- xyplot(logfun(get(input$UserYVariable)) ~ 
-        factor(get(input$UserXVariable)) | 
-        factor(get(input$UserCondVariable)),
-        data_filt(),
-      groups = {
-        if (input$UserGrouping == "none") NULL
-        else if(input$UserGrouping == "by cond. variable") get(input$UserCondVariable)
-        else if(input$UserGrouping == "by X variable") get(input$UserXVariable)
-        else if(input$UserGrouping == "by Y variable") {
-          get(input$UserYVariable) %>% logfun %>%
-          .bincode(., pretty(.))
-        } else get(gsub("by ", "", input$UserGrouping))
-      },
-      auto.key = list(columns = 4), 
-      par.settings = theme(),
-      layout = {
-        if (input$UserPanelLayout == "manual") {
-        c(input$UserPanelLayoutCols, input$UserPanelLayoutRows)}
-        else NULL},
-      as.table = TRUE, type = "l",
-      scales = list(alternating = FALSE, x = list(rot = 45)),
-      xlab = input$UserXVariable,
-      ylab = paste0(input$UserYVariable, " (", input$UserLogY, ")"),
-      panel = function(x, y, subscripts = NULL, groups = NULL, ...) {
-        panel.grid(h = -1, v = -1, 
-          col = ifelse(input$UserTheme == "ggplot2", "white", grey(0.9)))
-        if (type() %in% c("p", "b"))
-          panel.xyplot(x, y, subscripts = subscripts, groups = groups, type = "p")
-        panel.superpose(x, y, subscripts = subscripts, groups = groups, ...)
-      }, panel.groups = function(x, y, ...) {
-        if (type() %in% c("l", "b")) {
-          panel.xyplot(unique(x), 
-            tapply(y, x, function(x) mean(x, na.rm = TRUE)), ...)
-        }
-      }
+    # make plot and print
+    plot <- plot_dotplot(
+      x = input$UserXVariable,
+      y = input$UserYVariable,
+      cond_var = input$UserCondVariable,
+      groups = grouping(),
+      data = data_filt(),
+      logfun = logfun,
+      theme = theme(),
+      layout = layout(),
+      type = type(),
+      input = input
     )
     
     # print plot to output panel
     print(plot)
     # download function
-    output$UserDownloadDotplot <- getDownload(filename = "boxplot.svg", plot = plot)
+    output$UserDownloadDotplot <- getDownload(filename = "dotplot.svg", plot = plot)
   
+  })
+  
+
+  # PLOT DATA AS HEATMAP WITH LEVELPLOT
+  # ***********************************************
+  output$heatmap <- renderPlot(res = 120, { 
+    
+    # make plot and print
+    plot <- plot_heatmap(
+      x = input$UserXVariable,
+      y = input$UserCondVariable,
+      z = input$UserYVariable,
+      cond_var = grouping(),
+      data = data_filt(),
+      logfun = logfun,
+      theme = theme(),
+      layout = layout(),
+      input = input
+    )
+    
+    print(plot)
+    # download function
+    output$UserDownloadDotplot <- getDownload(filename = "heatmap.svg", plot = plot)
+    
   })
   
   
