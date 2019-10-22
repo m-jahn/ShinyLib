@@ -179,6 +179,9 @@ ui <- navbarPage(
             tabPanel("HEAT MAP", uiOutput("heatmap.ui"),
               downloadButton("UserDownloadHeat", "Download svg")
             ),
+            tabPanel("FITNESS", uiOutput("fitness.ui"),
+              downloadButton("UserDownloadFitness", "Download svg")
+            ),
             #tabPanel("CLUSTERING", uiOutput("clustering.ui"),
             #  numericInput("UserNClust", label = "N cluster", value = 4, step = 1)
             #),

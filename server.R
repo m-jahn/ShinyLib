@@ -144,16 +144,18 @@ server <- function(input, output) {
   # ***********************************************
   # To control size of the plots, we need to wrap plots
   # into additional renderUI function that can take height argument
-  output$table.ui <- renderUI({
-    tableOutput("table")
-  })
   output$dotplot.ui <- renderUI({
     plotOutput("dotplot", height = input$UserPrintHeight, width = input$UserPrintWidth)
   })
   output$heatmap.ui <- renderUI({
     plotOutput("heatmap", height = input$UserPrintHeight, width = input$UserPrintWidth)
   })
-  
+  output$fitness.ui <- renderUI({
+    plotOutput("fitness", height = input$UserPrintHeight, width = input$UserPrintWidth)
+  })
+  output$table.ui <- renderUI({
+    tableOutput("table")
+  })  
   
   # DOT PLOT OF DEPLETION / ENRICHMENT
   # ***********************************************
@@ -201,6 +203,32 @@ server <- function(input, output) {
     print(plot)
     # download function
     output$UserDownloadDotplot <- getDownload(filename = "heatmap.svg", plot = plot)
+    
+  })
+  
+  
+  # PLOT FITNESS / CORRELATION
+  # ***********************************************
+  output$fitness <- renderPlot(res = 120, { 
+    
+    # make plot and print
+    plot <- plot_fitness(
+      x = "sgRNA_short",
+      y = "fitness_score",
+      conditions = c("condition", "induction"),
+      cond_var = input$UserCondVariable,
+      groups = grouping(),
+      data = data_filt(),
+      logfun = logfun,
+      theme = theme(),
+      layout = layout(),
+      type = type(),
+      input = input
+    )
+    
+    print(plot)
+    # download function
+    output$UserDownloadFitness <- getDownload(filename = "fitness.svg", plot = plot)
     
   })
   
