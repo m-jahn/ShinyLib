@@ -5,43 +5,40 @@ plot_heatmap <- function(
   logfun, theme, layout, input
 ) {
   
-  if (is.null(cond_var)) {
-    
-    # plot heat map without conditioning
-    levelplot(
-      logfun(get(z)) ~ factor(get(x)) * factor(get(y)),
-      data,
-      par.settings = theme, 
-      layout = layout,
-      as.table = TRUE,
-      scales = list (alternating = FALSE),
-      xlab = x,
-      ylab = z
-    )
-    
-  } else {
-    
-    # in the rare case we condition by Y variable
-    # we have to add a binned pseudo Y variable
-    if (cond_var == input$UserYVariable) {
+  # in the rare case we condition by Y variable
+  # we have to add a binned pseudo Y variable
+  if (!is.null(cond_var)) {
+    if (cond_var == z) {
       data <- mutate(data,
         binned_Y = get(cond_var) %>% logfun %>% .bincode(., pretty(.)))
       cond_var <- "binned_Y"
     }
-    
-    # plot heat map with conditioning
-    levelplot(
-      logfun(get(z)) ~ factor(get(x)) * factor(get(y)) | factor(get(cond_var)),
-      data,
-      par.settings = theme, 
-      layout = layout,
-      as.table = TRUE,
-      scales = list (alternating = FALSE),
-      xlab = x,
-      ylab = z
-    )
-    
   }
   
+  # prepare data: heatmap can not display replicate points per
+  # condition -> need to aggregate replicate values as mean or median
+  data <- group_by_at(data, vars(c(x, y, cond_var))) %>%
+    summarize_at(vars(z), .funs = function(x) mean(x, na.rm = TRUE))
+  
+  
+  # use formula interface to plot with and without conditioning
+  form <- "logfun(get(z)) ~ factor(get(x)) * factor(get(y))"
+  if (!is.null(cond_var)) {
+    form <- paste(form, "| factor(get(cond_var))")
+  }
+  
+  
+  # plot heat map
+  levelplot(
+    as.formula(form),
+    data,
+    par.settings = theme, 
+    layout = layout,
+    as.table = TRUE,
+    scales = list (alternating = FALSE),
+    xlab = x,
+    ylab = z
+  )
+
 }
 
