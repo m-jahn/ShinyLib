@@ -215,10 +215,9 @@ server <- function(input, output) {
     plot <- plot_fitness(
       x = "sgRNA_short",
       y = "fitness_score",
-      conditions = c("condition", "induction"),
-      cond_var = input$UserCondVariable,
+      cond_var = "condition",
       groups = grouping(),
-      data = data_filt(),
+      data = filter(data_filt(), timepoint == 0),
       logfun = logfun,
       theme = theme(),
       layout = layout(),
