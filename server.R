@@ -217,7 +217,9 @@ server <- function(input, output) {
       y = "fitness_score",
       cond_var = "condition",
       groups = grouping(),
-      data = filter(data_filt(), timepoint == 0),
+      data = filter(data_filt(), timepoint == 0) %>% 
+        select_at(vars(c("sgRNA_short", "sgRNA_index", "locus", 
+          "fitness_score", "condition", "induction", "Pathway", grouping()))),
       logfun = logfun,
       theme = theme(),
       layout = layout(),

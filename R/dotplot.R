@@ -17,7 +17,7 @@ plot_dotplot <- function(
     }
     
     # determine number of columns for group legend
-    if (length(unique(data[[groups]])) <= 10) {
+    if (length(unique(data[[groups]])) <= 20) {
       ncol_legend <- length(unique(data[[groups]])) %>%
         replace(., . > 4, 4)
     } else {

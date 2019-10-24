@@ -5,12 +5,9 @@ plot_fitness <- function(
   logfun, theme, layout, type, input
 ) {
   
-  # determine number of different conditions
-  conditions <- unique(data[[cond_var]])
-  
   if (!is.null(groups)) {
     # determine number of columns for group legend
-    if (length(unique(data[[groups]])) <= 10) {
+    if (length(unique(data[[groups]])) <= 20) {
       ncol_legend <- length(unique(data[[groups]])) %>%
         replace(., . > 4, 4)
     } else {
@@ -19,13 +16,15 @@ plot_fitness <- function(
   } else {
     ncol_legend <- NULL
   }
-    
+  
+  # determine number of different conditions
+  conditions <- unique(data[[cond_var]])
   
   # histogram of gene fitness if only 1 cond selected
-  if (length(conditions) >= 1) {
+  if (length(conditions) == 1) {
     
     densityplot(
-      ~ logfun(get(y)),
+      ~ get(y),
       data,
       groups = {if (is.null(groups)) NULL else factor(get(groups))},
       par.settings = theme,
@@ -37,15 +36,42 @@ plot_fitness <- function(
       panel = function(x, y, ...) {
         panel.grid(h = -1, v = -1,
           col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+        panel.abline(v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.densityplot(x, lwd = 2, ...)
       }
     )
     
-  #} else if (length(conditions) > 1) {
+  } else if (length(conditions) == 2) {
     
+    # spread data condition wise
+    if (cond_var %in% colnames(data) &
+        groups != cond_var) {
+      
+      xyplot(get(conditions[1]) ~ get(conditions[2]),
+        spread(data, get(cond_var), get(y)),
+        groups = {if (is.null(groups)) NULL else factor(get(groups))},
+        par.settings = theme,
+        layout = layout,
+        as.table = TRUE,
+        scales = list(alternating = FALSE),
+        xlab = paste0("fitness - ", conditions[1]), 
+        ylab = paste0("fitness - ", conditions[2]),
+        auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
+        panel = function(x, y, ...) {
+          panel.grid(h = -1, v = -1,
+            col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+          panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
+          panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
+          panel.xyplot(x, y, ...)
+        }
+      )
+      
+    } else {
+      stop("'condition' should not be the grouping variable, 
+        or the chosen condition is not present in the data.")
+    }
     
-    
-  } else NULL
-  
-  
+  } else {
+    stop("please select only 1 or 2 conditions to compare fitness.")
+  }
 }
