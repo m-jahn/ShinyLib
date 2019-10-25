@@ -9,9 +9,9 @@ server <- function(input, output) {
   data <- reactive({
     
     # read user selected data set
-    load(input$UserDataChoice)
-    # coerce to base data.frame
-    data %>% ungroup %>% as.data.frame
+    get(input$UserDataChoice) %>%
+      # coerce to base data.frame
+      ungroup %>% as.data.frame
   })
   
   # GENERIC DATA FILTERING

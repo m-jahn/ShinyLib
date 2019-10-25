@@ -1,26 +1,4 @@
-# 
-# LOADING LIBRARIES
-# ***********************************************
-library(shiny)
-library(lattice)
-library(latticeExtra)
-library(tidyr)
-library(dplyr)
-library(shinyTree)
-library(shinythemes)
-library(dendextend)
-
-
-# LOADING EXTERNAL FUNCTIONS AND DATA
-# ***********************************************
-for (Rfile in list.files("R", full.names = TRUE)) {
-  source(Rfile)
-}
-
-# list of data files
-datalistfiles <- list.files("data", pattern = "\\.Rdata$", full.names = TRUE)
-
-
+#
 # SHINY UI
 # ***********************************************
 # Define user interface for application
