@@ -152,13 +152,16 @@ ui <- navbarPage(
         wellPanel(
           tabsetPanel(
             tabPanel("DEPLETION / ENRICHMENT", uiOutput("dotplot.ui"),
-              downloadButton("UserDownloadDotplot", "Download svg")
+              downloadButton("UserDownloadDotplot", "Download svg"),
+              help_dotplot()
             ),
             tabPanel("HEAT MAP", uiOutput("heatmap.ui"),
-              downloadButton("UserDownloadHeat", "Download svg")
+              downloadButton("UserDownloadHeat", "Download svg"),
+              help_heatmap()
             ),
             tabPanel("FITNESS", uiOutput("fitness.ui"),
-              downloadButton("UserDownloadFitness", "Download svg")
+              downloadButton("UserDownloadFitness", "Download svg"),
+              help_fitness()
             ),
             #tabPanel("CLUSTERING", uiOutput("clustering.ui"),
             #  numericInput("UserNClust", label = "N cluster", value = 4, step = 1)
@@ -175,9 +178,13 @@ ui <- navbarPage(
   # THE ABOUT PAGE
   tabPanel("About", 
     # THE SAME OR A BIT EXTENDED HELP BOX AS IN SIDEBAR
-    helpbox(width = 8),
-    fundbox(width = 8),
-    methbox(width = 8)
+    column(width = 4,
+      helpbox(width = 12),
+      fundbox(width = 12),
+    ),
+    column(width = 8,
+      methbox(width = 12)
+    )
   )
 
 )

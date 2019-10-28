@@ -202,7 +202,7 @@ server <- function(input, output) {
     
     print(plot)
     # download function
-    output$UserDownloadDotplot <- getDownload(filename = "heatmap.svg", plot = plot)
+    output$UserDownloadHeat <- getDownload(filename = "heatmap.svg", plot = plot)
     
   })
   

@@ -34,7 +34,7 @@ plot_fitness <- function(
       layout = layout,
       as.table = TRUE,
       scales = list(alternating = FALSE),
-      xlab = paste0(y, " (", input$UserLogY, ")"), ylab = "density",
+      xlab = paste0("fitness (", input$UserLogY, ")"), ylab = "density",
       auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
       panel = function(x, y, ...) {
         panel.grid(h = -1, v = -1,
