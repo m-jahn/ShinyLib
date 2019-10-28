@@ -27,7 +27,7 @@ plot_fitness <- function(
   if (length(conditions) == 1) {
     
     densityplot(
-      ~ get(y),
+      ~ get(y) %>% setNames(get(x)),
       data,
       groups = {if (is.null(groups)) NULL else factor(get(groups))},
       par.settings = theme,
@@ -41,6 +41,10 @@ plot_fitness <- function(
           col = ifelse(theme == "ggplot2", "white", grey(0.9)))
         panel.abline(v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.densityplot(x, lwd = 2, ...)
+        margin = current.panel.limits()$ylim %>% {abs(diff(.))}
+        sel <- x <= -1.5
+        panel.text(x[sel], rnorm(length(sel), margin/3, margin/6), 
+          names(x[sel]), col = grey(0.4, 0.6), cex = 0.5)
       }
     )
     
@@ -50,38 +54,27 @@ plot_fitness <- function(
     if (cond_var %in% colnames(data) &
         groups != cond_var) {
       
-      custom.ggplot <- theme_bw()
-      custom.ggplot$legend.position <- "top"
-      custom.ggplot$legend.title$colour <- "white"
-      
-      # a ggplot is necessary here to allow hover interactions
-      ggplot(spread(data, get(cond_var), get(y)),
-        aes(get(conditions[1]), get(conditions[2]),
-          colour = {if (is.null(groups)) NULL else factor(get(groups))})) + 
-        geom_point(size = 2) +
-        scale_colour_manual(values = theme$superpose.polygon$col[c(1,2)]) +
-        labs(
-          x = paste0("fitness - ", conditions[1]), 
-          y = paste0("fitness - ", conditions[2])) +
-        custom.ggplot
-      
-      
-      # xyplot(get(conditions[1]) ~ get(conditions[2]),
-      #   spread(data, get(cond_var), get(y)),
-      #   groups = {if (is.null(groups)) NULL else factor(get(groups))},
-      #   par.settings = theme,
-      #   xlab = paste0("fitness - ", conditions[1]),
-      #   ylab = paste0("fitness - ", conditions[2]),
-      #   auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
-      #   panel = function(x, y, ...) {
-      #     panel.grid(h = -1, v = -1,
-      #       col = ifelse(theme == "ggplot2", "white", grey(0.9)))
-      #     panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
-      #     panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
-      #     panel.xyplot(x, y, ...)
-      #   }
-      # )
-      
+      data <- spread(data, get(cond_var), get(y))
+      xyplot(get(conditions[1]) ~ get(conditions[2]) %>% setNames(get(x)),
+        data,
+        groups = {if (is.null(groups)) NULL else factor(get(groups))},
+        par.settings = theme,
+        xlab = paste0("fitness - ", conditions[1]),
+        ylab = paste0("fitness - ", conditions[2]),
+        auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
+        panel = function(x, y, ...) {
+          panel.grid(h = -1, v = -1,
+            col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+          panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
+          panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
+          panel.xyplot(x, y, ...)
+          margin = current.panel.limits()$ylim %>% {abs(diff(.))}
+          sel <- x <= -1.5 | y <= -1.5
+          panel.text(x[sel], y[sel]+margin/20, names(x[sel]), 
+            col = grey(0.4, 0.6), cex = 0.5)
+          
+        }
+      )
       
     } else {
       stop("'condition' should not be the grouping variable, 

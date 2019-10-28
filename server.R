@@ -209,17 +209,18 @@ server <- function(input, output) {
   
   # PLOT FITNESS / CORRELATION
   # ***********************************************
-  output$fitness <- renderPlot(res = 120, { 
+  output$fitness <- renderPlot(res = 120, {
     
     # make plot and print
     plot <- plot_fitness(
-      x = "sgRNA_short",
+      x = "sgRNA",
       y = "fitness_score",
       cond_var = "condition",
       groups = grouping(),
-      data = filter(data_filt(), timepoint == 0) %>% 
-        select_at(vars(c("sgRNA_short", "sgRNA_index", "locus", 
-          "fitness_score", "condition", "induction", "Pathway", grouping()))),
+      data = filter(data_filt(), timepoint == 0) %>%
+        mutate(sgRNA = paste0(sgRNA_short, "_", sgRNA_index)) %>%
+        select_at(vars(c("sgRNA", "locus", "fitness_score", 
+          "condition", "induction", "Pathway", grouping()))),
       logfun = logfun,
       theme = theme(),
       layout = layout(),
