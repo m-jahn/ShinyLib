@@ -5,6 +5,9 @@ plot_fitness <- function(
   logfun, theme, layout, type, input
 ) {
   
+  # check that data is loaded
+  req(nrow(data) != 0)
+  
   if (!is.null(groups)) {
     # determine number of columns for group legend
     if (length(unique(data[[groups]])) <= 20) {
@@ -47,24 +50,38 @@ plot_fitness <- function(
     if (cond_var %in% colnames(data) &
         groups != cond_var) {
       
-      xyplot(get(conditions[1]) ~ get(conditions[2]),
-        spread(data, get(cond_var), get(y)),
-        groups = {if (is.null(groups)) NULL else factor(get(groups))},
-        par.settings = theme,
-        layout = layout,
-        as.table = TRUE,
-        scales = list(alternating = FALSE),
-        xlab = paste0("fitness - ", conditions[1]), 
-        ylab = paste0("fitness - ", conditions[2]),
-        auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
-        panel = function(x, y, ...) {
-          panel.grid(h = -1, v = -1,
-            col = ifelse(theme == "ggplot2", "white", grey(0.9)))
-          panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
-          panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
-          panel.xyplot(x, y, ...)
-        }
-      )
+      custom.ggplot <- theme_bw()
+      custom.ggplot$legend.position <- "top"
+      custom.ggplot$legend.title$colour <- "white"
+      
+      # a ggplot is necessary here to allow hover interactions
+      ggplot(spread(data, get(cond_var), get(y)),
+        aes(get(conditions[1]), get(conditions[2]),
+          colour = {if (is.null(groups)) NULL else factor(get(groups))})) + 
+        geom_point(size = 2) +
+        scale_colour_manual(values = theme$superpose.polygon$col[c(1,2)]) +
+        labs(
+          x = paste0("fitness - ", conditions[1]), 
+          y = paste0("fitness - ", conditions[2])) +
+        custom.ggplot
+      
+      
+      # xyplot(get(conditions[1]) ~ get(conditions[2]),
+      #   spread(data, get(cond_var), get(y)),
+      #   groups = {if (is.null(groups)) NULL else factor(get(groups))},
+      #   par.settings = theme,
+      #   xlab = paste0("fitness - ", conditions[1]),
+      #   ylab = paste0("fitness - ", conditions[2]),
+      #   auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
+      #   panel = function(x, y, ...) {
+      #     panel.grid(h = -1, v = -1,
+      #       col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+      #     panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
+      #     panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
+      #     panel.xyplot(x, y, ...)
+      #   }
+      # )
+      
       
     } else {
       stop("'condition' should not be the grouping variable, 

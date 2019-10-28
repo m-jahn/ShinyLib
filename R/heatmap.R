@@ -5,6 +5,9 @@ plot_heatmap <- function(
   logfun, theme, layout, input
 ) {
   
+  # check that data is loaded
+  req(nrow(data) != 0)
+  
   # in the rare case we condition by Y variable
   # we have to add a binned pseudo Y variable
   if (!is.null(cond_var)) {

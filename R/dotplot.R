@@ -5,6 +5,8 @@ plot_dotplot <- function(
   logfun, theme, layout, type, input
 ) {
   
+  # check that data is loaded
+  req(nrow(data) != 0)
   
   if (!is.null(groups)) {
     

@@ -1,5 +1,6 @@
 library(shiny)
 library(dplyr)
+library(ggplot2)
 library(lattice)
 
 ui <- fluidPage(
@@ -33,35 +34,24 @@ ui <- fluidPage(
 server <- function(input, output) {
 
   data <- reactive({
-    mtcars <- mtcars %>% mutate(model = rownames(mtcars))
-    print(mtcars)
-    mtcars
+    mtcars %>% mutate(model = rownames(mtcars))
   })
 
   output$plot1 <- renderPlot({
     
-    xyplot(mpg ~ disp, data())
-    
+    ggplot(data(), aes(mpg, disp)) + geom_point() + theme_bw()
+
   })
 
   output$my_tooltip <- renderUI({
-    hover <- input$plot_hover
-    data <- mutate_at(data(), vars("mpg", "disp"),
-      function(x) scales::rescale(x, to = c(-0.04, 1.04))
-    )
-    y <- nearPoints(data, hover, xvar = "mpg", threshold = 20, yvar = "disp")[ , c("mpg", "disp")]
-    req(nrow(y) != 0)
+    df <- nearPoints(data(), input$plot_hover)
+    req(nrow(df) != 0)
     verbatimTextOutput("vals")
   })
-
+  
   output$vals <- renderPrint({
-    hover <- input$plot_hover
-    data <- mutate_at(data(), vars("mpg", "disp"),
-      function(x) scales::rescale(x, to = c(-0.04, 1.04))
-    )
-    data$model <- rownames(data)
-    res <- nearPoints(data, hover, xvar = "mpg", threshold = 20, yvar = "disp")[ , "model"]
-    res
+    nearPoints(data(), input$plot_hover)[["model"]]
   })
 }
+
 shinyApp(ui = ui, server = server)
