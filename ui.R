@@ -52,6 +52,56 @@ ui <- navbarPage(
         h4("PLOT OPTIONS"),
         fluidRow(
           
+          # FACTORIZATION AND ORDERING OPTIONS
+          column(width = 4, 
+            selectInput("UserXVariable", 
+              "X variable:", choices = list("timepoint", "generations", "condition", 
+                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
+              selected = "timepoint")
+          ),
+          column(width = 4, 
+            selectInput("UserYVariable", 
+              "Y variable:", choices = list("FoldChange", "fitness_score", 
+                "baseMean", "padj"),
+              selected = "FoldChange")
+          ),
+          column(width = 4, 
+            selectInput("UserCondVariable", 
+              "Conditioning variable:", choices = list("timepoint", "generations", "condition", 
+                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
+              selected = "sgRNA_short")
+          )
+        ),
+        
+        fluidRow(
+          
+          # DATA GROUPING OPTIONS
+          column(width = 3, 
+            selectInput("UserTheme", 
+              "Theme:", choices = list("lattice grey", "lattice blue", "ggplot1", "ggplot2"),
+              selected = "lattice grey")
+          ),
+          column(width = 3, 
+            selectInput("UserGrouping", 
+              "Grouping:", choices = list("none", "by cond. variable", "by X variable", 
+                "by Y variable", "by condition", "by induction"),
+              selected = "by induction")
+          ),
+          column(width = 3, 
+            selectInput("UserPlotType", 
+              "Plot type:", choices = list("points", "lines", "points and lines"),
+              selected = "points and lines")
+          ),
+          column(width = 3, 
+            selectInput("UserLogY", 
+              "Y scale:", choices = list("linear","log 2","log 10", "log e"),
+              selected = "log 2")
+          )
+        ),
+        
+        # OTHER GRAPHICAL PLOT OPTIONS
+        fluidRow(
+          
           # PANEL LAYOUT AND PLOT DIMESNIONS
           column(width = 4, 
             selectInput("UserPanelLayout", 
@@ -79,56 +129,6 @@ ui <- navbarPage(
               "Plot width:", choices = c("auto", 1:10*100), selected = "auto")
           )
         ),
-        
-        fluidRow(
-          
-          # FACTORIZATION AND ORDERING OPTIONS
-          column(width = 4, 
-            selectInput("UserXVariable", 
-              "X variable:", choices = list("timepoint", "generations", "condition", 
-                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
-              selected = "timepoint")
-          ),
-          column(width = 4, 
-            selectInput("UserYVariable", 
-              "Y variable:", choices = list("FoldChange", "fitness_score", 
-                "baseMean", "padj"),
-              selected = "FoldChange")
-          ),
-          column(width = 4, 
-            selectInput("UserCondVariable", 
-              "Conditioning variable:", choices = list("timepoint", "generations", "condition", 
-                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
-              selected = "sgRNA_short")
-          )
-        ),
-        
-        fluidRow(
-          
-          # OTHER GRAPHICAL PLOT OPTIONS
-          column(width = 3, 
-            selectInput("UserTheme", 
-              "Theme:", choices = list("lattice grey", "lattice blue", "ggplot1", "ggplot2"),
-              selected = "lattice grey")
-          ),
-          column(width = 3, 
-            selectInput("UserGrouping", 
-              "Grouping:", choices = list("none", "by cond. variable", "by X variable", 
-                "by Y variable", "by condition", "by induction"),
-              selected = "by induction")
-          ),
-          column(width = 3, 
-            selectInput("UserPlotType", 
-              "Plot type:", choices = list("points", "lines", "points and lines"),
-              selected = "points and lines")
-          ),
-          column(width = 3, 
-            selectInput("UserLogY", 
-              "Y scale:", choices = list("linear","log 2","log 10", "log e"),
-              selected = "log 2")
-          )
-        ),
-        
         
         hr(),
         fluidRow(
