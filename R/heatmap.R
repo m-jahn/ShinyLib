@@ -2,7 +2,8 @@
 # some options for dotplot do not apply here
 plot_heatmap <- function(
   x, y, z, cond_var, data,
-  logfun, theme, layout, input
+  logfun, theme, layout, input,
+  rotate_x = 0
 ) {
   
   # check that data is loaded
@@ -38,7 +39,7 @@ plot_heatmap <- function(
     par.settings = theme, 
     layout = layout,
     as.table = TRUE,
-    scales = list (alternating = FALSE),
+    scales = list (alternating = FALSE, x = list(rot = rotate_x)),
     xlab = x,
     ylab = z
   )
