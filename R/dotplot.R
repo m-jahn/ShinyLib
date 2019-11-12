@@ -2,7 +2,8 @@
 #
 plot_dotplot <- function(
   x, y, cond_var, groups, data,
-  logfun, theme, layout, type, input
+  logfun, theme, layout, type, input,
+  plot_error = FALSE, error = NULL
 ) {
   
   # check that data is loaded
@@ -36,7 +37,7 @@ plot_dotplot <- function(
   )
   
   # make dot plot
-  xyplot(
+  plot <- xyplot(
     logfun(get(y)) ~ factor(get(x)) | factor(get(cond_var)),
     data,
     groups = {if (is.null(groups)) NULL else factor(get(groups))},
@@ -60,5 +61,33 @@ plot_dotplot <- function(
       }
     } 
   )
+  
+  # optional addition of error margins, for mean, median, and mean mass 
+  # fraction we use the relative standard deviation, 
+  # for fold change we use confidence interval
+  if (plot_error) {
+    
+    plot <- plot + 
+    as.layer(
+      xyplot(
+        logfun(get(y)*(1+get(error))) +
+        logfun(get(y)*(1-get(error))) ~
+        factor(get(x)) | factor(get(cond_var)), data,
+        panel = function(x, y, ...) {
+          panel.segments(x0 = as.numeric(x), x1 = as.numeric(x), 
+            y0 = y[1:(length(y)/2)], y1 = y[(length(y)/2+1):length(y)], 
+            col = grey(0.6, alpha = 0.3), lwd = 1.5)
+          panel.key(
+            labels = paste("+/-", error),
+            which.panel = 1, corner = c(0.05, 0.05), 
+            lines = FALSE, points = FALSE, col = grey(0.6), cex = 0.7
+          )
+        }
+      )
+    )
+  
+  }
+  
+  plot
   
 }
