@@ -55,7 +55,7 @@ plot_fitness <- function(
         groups != cond_var) {
       
       data <- spread(data, get(cond_var), get(y))
-      xyplot(get(conditions[1]) ~ get(conditions[2]) %>% setNames(get(x)),
+      xyplot(get(conditions[2]) ~ get(conditions[1]) %>% setNames(get(x)),
         data,
         groups = {if (is.null(groups)) NULL else factor(get(groups))},
         par.settings = theme,
