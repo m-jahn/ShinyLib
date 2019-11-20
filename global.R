@@ -10,6 +10,7 @@ library(ggplot2)
 library(shinyTree)
 library(shinythemes)
 library(dendextend)
+library(directlabels)
 
 
 # LOADING EXTERNAL FUNCTIONS AND DATA
