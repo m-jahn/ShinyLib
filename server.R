@@ -83,6 +83,18 @@ server <- function(input, output) {
       selected = config()$default$grouping[1])
   })
   
+  output$UserPlotType <- renderUI({
+    selectInput("UserPlotType", 
+      "Plot type:", config()$default$plot_type,
+      selected = config()$default$plot_type[1])
+  })
+  
+  output$UserLogY <- renderUI({
+    selectInput("UserLogY", 
+      "Y scale:", config()$default$y_scale,
+      selected = config()$default$y_scale[1])
+  })
+  
   # SOME GLOBAL FUNCTIONS THAT ALL PLOTS USE
   # filter data by user choices
   filtGenes <- reactive({

@@ -70,6 +70,15 @@ default:
     - by Y variable
     - by condition
     - none
+  plot_type:
+    - points and lines
+    - points
+    - lines
+  y_scale:
+    - log 2
+    - log 10
+    - log e
+    - linear
   fitness:
     x_var: sgRNA
     y_var: fitness_score

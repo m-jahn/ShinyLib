@@ -74,14 +74,10 @@ ui <- navbarPage(
             uiOutput("UserGrouping")
           ),
           column(width = 3,
-            selectInput("UserPlotType",
-              "Plot type:", choices = list("points", "lines", "points and lines"),
-              selected = "points and lines")
+            uiOutput("UserPlotType")
           ),
           column(width = 3,
-            selectInput("UserLogY",
-              "Y scale:", choices = list("linear","log 2","log 10", "log e"),
-              selected = "log 2")
+            uiOutput("UserLogY")
           )
         ),
         
