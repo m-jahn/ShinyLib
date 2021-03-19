@@ -41,8 +41,9 @@ plot_fitness <- function(
           col = ifelse(theme == "ggplot2", "white", grey(0.9)))
         panel.abline(v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.densityplot(x, lwd = 2, ...)
-        panel.directlabel(x, rep(0, length(x)), labels = labels, 
-          x_boundary = c(-Inf, -2), draw_box = TRUE, cex = 0.5, ...)
+        latticetools::panel.directlabel(x, rep(0, length(x)), labels = labels, 
+          x_boundary = c(-Inf, -2), draw_box = TRUE, cex = 0.45, 
+          box_fill = grey(0.9, 0.5), box_line = TRUE, ...)
       }
     )
     
@@ -52,9 +53,11 @@ plot_fitness <- function(
     if (cond_var %in% colnames(data) &
         groups != cond_var) {
       
-      data <- spread(data, get(cond_var), get(y))
-      xyplot(get(conditions[2]) ~ get(conditions[1]),
-        data,
+      # spread data based on condition
+      data <- pivot_wider(data, id_cols = all_of(c(x, groups)),
+        names_from = cond_var, values_from = y)
+      
+      xyplot(get(conditions[2]) ~ get(conditions[1]), data,
         groups = {if (is.null(groups)) NULL else factor(get(groups))},
         par.settings = theme, labels = data[[x]],
         xlab = paste0("fitness - ", conditions[1]),
@@ -66,9 +69,10 @@ plot_fitness <- function(
           panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
           panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
           panel.xyplot(x, y, ...)
-          panel.directlabel(x, y, labels = labels, 
+          latticetools::panel.directlabel(x, y, labels = labels,
             x_boundary = c(-Inf, -1), y_boundary = c(-Inf, -1),
-            draw_box = TRUE, cex = 0.5, ...)
+            draw_box = TRUE, cex = 0.45, box_fill = grey(0.9, 0.5), 
+            box_line = TRUE, ...)
         }
       )
       

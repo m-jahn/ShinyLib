@@ -19,37 +19,69 @@ server <- function(input, output) {
     
     # filter data set
     data() %>% filter(
-      Gene.names %in% filtGenes(),
-      condition %in% input$UserDataFilterCond,
-      timepoint %in% input$UserDataFilterTime,
-      induction %in% input$UserDataFilterInd
+      get(config()$tree$gene_level) %in% filtGenes(),
+      get(names(config()$data)[1]) %in% input$UserDataFilterCond,
+      get(names(config()$data)[2]) %in% input$UserDataFilterTime,
+      get(names(config()$data)[3]) %in% input$UserDataFilterInd
     )
   
   })
   
+  # GET GLOBAL CONFIGURATION FOR CHOSEN DATASET
+  config <- reactive({data_config[[input$UserDataChoice]]})
   
   # DYNAMIC BOXES FOR DATA FILTERING
   output$FilterCond <- renderUI({
     selectInput("UserDataFilterCond",
-      "Condition:", unique(data()$condition), 
-      selected = unique(data()$condition[1]),
+      "Condition:", config()$data$condition, 
+      selected = config()$data$condition[1],
       multiple = TRUE)
   })
   
   output$FilterTime <- renderUI({
     selectInput("UserDataFilterTime",
-      "Time point:", unique(data()$timepoint), 
-      selected = unique(data()$timepoint),
+      "Time point:", config()$data$timepoint, 
+      selected = config()$data$timepoint,
       multiple = TRUE)
   })
   
   output$FilterInd <- renderUI({
     selectInput("UserDataFilterInd",
-      "Induction:", unique(data()$induction), 
-      selected = unique(data()$induction),
+      "Induction:", config()$data$induction, 
+      selected = config()$data$induction,
       multiple = TRUE)
   })
   
+  # DYNAMIC BOXES FOR DATA VIZ OPTIONS
+  output$UserXVariable <- renderUI({
+    selectInput("UserXVariable", 
+      "X variable:", config()$plotting$x_vars,
+      selected = config()$plotting$x_vars[1])
+  })
+  
+  output$UserYVariable <- renderUI({
+    selectInput("UserYVariable", 
+      "Y variable:", config()$plotting$y_vars,
+      selected = config()$plotting$y_vars[1])
+  })
+  
+  output$UserCondVariable <- renderUI({
+    selectInput("UserCondVariable", 
+      "Conditioning variable:", config()$plotting$cond_vars,
+      selected = config()$plotting$cond_vars[1])
+  })
+  
+  output$UserTheme <- renderUI({
+    selectInput("UserTheme", 
+      "Theme:", config()$default$theme,
+      selected = config()$default$theme[1])
+  })
+  
+  output$UserGrouping <- renderUI({
+    selectInput("UserGrouping", 
+      "Grouping:", config()$default$grouping,
+      selected = config()$default$grouping[1])
+  })
   
   # SOME GLOBAL FUNCTIONS THAT ALL PLOTS USE
   # filter data by user choices
@@ -117,10 +149,10 @@ server <- function(input, output) {
   # SHINY TREE
   output$tree <- renderTree({
      
-    # select only some columns for construction of tree
-    cols <- c("Process.abbr", "Pathway.abbr", "Gene.names", "Protein")
     # remove duplicated proteins
-    prot <- data()[!duplicated(data()$Gene.names), cols]
+    prot <- filter(data(), !duplicated(get(config()$tree$gene_level))) %>%
+      # select columns for construction of tree
+      select(all_of(config()$tree$levels))
     
     # generate list for tree using this recursive function
     makeTree <-function(rows, col, numcols) {
@@ -213,14 +245,12 @@ server <- function(input, output) {
     
     # make plot and print
     plot <- plot_fitness(
-      x = "sgRNA",
-      y = "fitness_score",
-      cond_var = "condition",
+      x = config()$default$fitness$x_var,
+      y = config()$default$fitness$y_var,
+      cond_var = config()$default$fitness$cond_var,
       groups = grouping(),
-      data = filter(data_filt(), timepoint == 0) %>%
-        mutate(sgRNA = paste0(sgRNA_short, "_", sgRNA_index)) %>%
-        select_at(vars(c("sgRNA", "locus", "fitness_score", 
-          "condition", "induction", "Pathway", grouping()))),
+      data = filter(data_filt(),
+        get(config()$default$fitness$filter$var) == config()$default$fitness$filter$val),
       logfun = logfun,
       theme = theme(),
       layout = layout(),

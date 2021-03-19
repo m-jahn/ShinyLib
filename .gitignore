@@ -1,2 +1,4 @@
 rsconnect/*
 *.Rhistory
+.Rproj.user
+*.Rproj

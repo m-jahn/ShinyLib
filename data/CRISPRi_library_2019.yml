@@ -1,0 +1,79 @@
+# variables to generate gene tree
+tree:
+  levels:
+    - Process.abbr
+    - Pathway.abbr
+    - Gene.names
+    - Protein
+  gene_level:
+    - Gene.names
+
+# main parameters to filter data
+data:
+  condition:
+    - L100
+    - L300
+    - LAC
+    - LD
+    - NACL
+  timepoint:
+    - 0
+    - 1
+    - 2
+    - 4
+    - 8
+    - 16
+    - 32
+  induction:
+    - i
+    - u
+
+# variables for plotting data
+plotting:
+  x_vars:
+    - timepoint
+    - generations
+    - condition
+    - induction
+    - sgRNA_short
+    - locus
+    - Protein
+    - Process
+    - Pathway
+  y_vars:
+    - FoldChange
+    - fitness_score
+    - baseMean
+    - padj
+  cond_vars:
+    - sgRNA_short
+    - timepoint
+    - generations
+    - condition
+    - induction
+    - locus
+    - Protein
+    - Process
+    - Pathway
+
+# default plot parameters
+default:
+  theme:
+    - lattice grey
+    - lattice blue
+    - ggplot1
+    - ggplot2
+  grouping:
+    - by induction
+    - by cond. variable
+    - by X variable
+    - by Y variable
+    - by condition
+    - none
+  fitness:
+    x_var: sgRNA
+    y_var: fitness_score
+    cond_var: condition
+    filter:
+      var: timepoint
+      val: 0

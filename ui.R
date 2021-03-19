@@ -27,8 +27,8 @@ ui <- navbarPage(
         fluidRow(
           column(width = 12, 
             selectInput("UserDataChoice",
-              "Choose data:", datalistfiles, 
-              selected = datalistfiles[1])
+              "Choose data:", data_list,
+              selected = data_list[1])
           )
         ),
         
@@ -53,47 +53,33 @@ ui <- navbarPage(
         fluidRow(
           
           # FACTORIZATION AND ORDERING OPTIONS
-          column(width = 4, 
-            selectInput("UserXVariable", 
-              "X variable:", choices = list("timepoint", "generations", "condition", 
-                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
-              selected = "timepoint")
+          column(width = 4,
+            uiOutput("UserXVariable")
           ),
           column(width = 4, 
-            selectInput("UserYVariable", 
-              "Y variable:", choices = list("FoldChange", "fitness_score", 
-                "baseMean", "padj"),
-              selected = "FoldChange")
+            uiOutput("UserYVariable")
           ),
-          column(width = 4, 
-            selectInput("UserCondVariable", 
-              "Conditioning variable:", choices = list("timepoint", "generations", "condition", 
-                "induction", "sgRNA_short", "locus", "Protein", "Process","Pathway"),
-              selected = "sgRNA_short")
+          column(width = 4,
+            uiOutput("UserCondVariable")
           )
         ),
         
         fluidRow(
           
           # DATA GROUPING OPTIONS
-          column(width = 3, 
-            selectInput("UserTheme", 
-              "Theme:", choices = list("lattice grey", "lattice blue", "ggplot1", "ggplot2"),
-              selected = "lattice grey")
+          column(width = 3,
+            uiOutput("UserTheme")
           ),
-          column(width = 3, 
-            selectInput("UserGrouping", 
-              "Grouping:", choices = list("none", "by cond. variable", "by X variable", 
-                "by Y variable", "by condition", "by induction"),
-              selected = "by induction")
+          column(width = 3,
+            uiOutput("UserGrouping")
           ),
-          column(width = 3, 
-            selectInput("UserPlotType", 
+          column(width = 3,
+            selectInput("UserPlotType",
               "Plot type:", choices = list("points", "lines", "points and lines"),
               selected = "points and lines")
           ),
-          column(width = 3, 
-            selectInput("UserLogY", 
+          column(width = 3,
+            selectInput("UserLogY",
               "Y scale:", choices = list("linear","log 2","log 10", "log e"),
               selected = "log 2")
           )
@@ -135,7 +121,7 @@ ui <- navbarPage(
           
           # SELECT GENES OR PROTEINS FROM TREE
           column(width = 6, 
-            h4("PROTEIN SELECTION"),
+            h4("GENE SELECTION"),
             shinyTree("tree", search = TRUE, checkbox = TRUE)
           ),
           
