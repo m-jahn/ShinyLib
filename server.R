@@ -257,9 +257,9 @@ server <- function(input, output) {
     
     # make plot and print
     plot <- plot_fitness(
-      x = config()$default$fitness$x_var,
-      y = config()$default$fitness$y_var,
-      cond_var = config()$default$fitness$cond_var,
+      x_var = config()$default$fitness$x_var,
+      y_var = config()$default$fitness$y_var,
+      comparison = config()$default$fitness$comparison,
       groups = grouping(),
       data = filter(data_filt(),
         get(config()$default$fitness$filter$var) == config()$default$fitness$filter$val),

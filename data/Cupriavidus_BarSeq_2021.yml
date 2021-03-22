@@ -71,7 +71,7 @@ default:
   fitness:
     x_var: gene_name
     y_var: fitness_score
-    cond_var: condition
+    comparison: condition
     filter:
       var: timepoint
       val: 8

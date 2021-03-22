@@ -82,7 +82,7 @@ default:
   fitness:
     x_var: sgRNA
     y_var: fitness_score
-    cond_var: condition
+    comparison: condition
     filter:
       var: timepoint
       val: 0

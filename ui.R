@@ -141,7 +141,7 @@ ui <- navbarPage(
               downloadButton("UserDownloadHeat", "Download svg"),
               help_heatmap()
             ),
-            tabPanel("FITNESS", uiOutput("fitness.ui"),
+            tabPanel("FITNESS COMPARISON", uiOutput("fitness.ui"),
               downloadButton("UserDownloadFitness", "Download svg"),
               help_fitness()
             ),
