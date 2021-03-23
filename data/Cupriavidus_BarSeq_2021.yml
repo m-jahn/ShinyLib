@@ -11,15 +11,21 @@ tree:
 # main parameters to filter data
 data:
   condition:
-    - continuous
-    - short pulse
-    - long pulse
+    values:
+      - continuous
+      - short pulse
+      - long pulse
+    selected:
+      - continuous
   timepoint:
-    - 0
-    - 8
-    - 16
-  induction:
-    - not applicable
+    values:
+      - 0
+      - 8
+      - 16
+    selected:
+      - 0
+      - 8
+      - 16
 
 # variables for plotting data
 plotting:

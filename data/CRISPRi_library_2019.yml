@@ -11,22 +11,38 @@ tree:
 # main parameters to filter data
 data:
   condition:
-    - L100
-    - L300
-    - LAC
-    - LD
-    - NACL
+    values:
+      - L100
+      - L300
+      - LAC
+      - LD
+      - NACL
+    selected:
+      - L100
   timepoint:
-    - 0
-    - 1
-    - 2
-    - 4
-    - 8
-    - 16
-    - 32
+    values:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
+    selected:
+      - 0
+      - 1
+      - 2
+      - 4
+      - 8
+      - 16
+      - 32
   induction:
-    - i
-    - u
+    values:
+      - i
+      - u
+    selected:
+      - i
+      - u
 
 # variables for plotting data
 plotting:

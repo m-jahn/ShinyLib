@@ -19,36 +19,25 @@ server <- function(input, output) {
     # filter data set by gene selection
     data <- data() %>% filter(get(config()$tree$gene_level) %in% filtGenes())
     # filter data set by user input
-    filter(data,
-      get(names(config()$data)[1]) %in% input$UserDataFilterCond,
-      get(names(config()$data)[2]) %in% input$UserDataFilterTime,
-      get(names(config()$data)[3]) %in% input$UserDataFilterInd
-    )
+    for (filt in names(config()$data)) {
+      data <- filter(data, get(filt) %in% input[[paste0("Filter_", filt)]])
+    }
+    data
   })
   
   # GET GLOBAL CONFIGURATION FOR CHOSEN DATASET
   config <- reactive({data_config[[input$UserDataChoice]]})
   
   # DYNAMIC BOXES FOR DATA FILTERING
-  output$FilterCond <- renderUI({
-    selectInput("UserDataFilterCond",
-      "Condition:", config()$data$condition, 
-      selected = config()$data$condition[1],
-      multiple = TRUE)
-  })
-  
-  output$FilterTime <- renderUI({
-    selectInput("UserDataFilterTime",
-      "Time point:", config()$data$timepoint, 
-      selected = config()$data$timepoint,
-      multiple = TRUE)
-  })
-  
-  output$FilterInd <- renderUI({
-    selectInput("UserDataFilterInd",
-      "Induction:", config()$data$induction, 
-      selected = config()$data$induction,
-      multiple = TRUE)
+  output$UserFilters <- renderUI({
+    lapply(names(config()$data), function(filt) {
+      selectInput(
+        inputId = paste0("Filter_", filt),
+        label = paste0(filt, ":"),
+        choices = config()$data[[filt]]$values,
+        selected = config()$data[[filt]]$selected,
+        multiple = TRUE)
+    })
   })
   
   # DYNAMIC BOXES FOR DATA VIZ OPTIONS

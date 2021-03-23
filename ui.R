@@ -25,23 +25,13 @@ ui <- navbarPage(
         h4("DATA OPTIONS"),
         
         fluidRow(
-          column(width = 12, 
+          column(width = 6,
             selectInput("UserDataChoice",
-              "Choose data:", data_list,
+              "Choose data:", data_list, 
               selected = data_list[1])
-          )
-        ),
-        
-        # select additional filters
-        fluidRow(
-          column(width = 4, 
-            uiOutput("FilterCond")
           ),
-          column(width = 4,
-            uiOutput("FilterTime")
-          ),
-          column(width = 4,
-            uiOutput("FilterInd")
+          column(width = 6,
+            uiOutput("UserFilters")
           )
         ),
         
