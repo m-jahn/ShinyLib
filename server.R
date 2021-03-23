@@ -16,15 +16,14 @@ server <- function(input, output) {
   
   # GENERIC DATA FILTERING
   data_filt <- reactive({
-    
-    # filter data set
-    data() %>% filter(
-      get(config()$tree$gene_level) %in% filtGenes(),
+    # filter data set by gene selection
+    data <- data() %>% filter(get(config()$tree$gene_level) %in% filtGenes())
+    # filter data set by user input
+    filter(data,
       get(names(config()$data)[1]) %in% input$UserDataFilterCond,
       get(names(config()$data)[2]) %in% input$UserDataFilterTime,
       get(names(config()$data)[3]) %in% input$UserDataFilterInd
     )
-  
   })
   
   # GET GLOBAL CONFIGURATION FOR CHOSEN DATASET

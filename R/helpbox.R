@@ -3,18 +3,22 @@ helpbox <- function(width = 6) {
     h4('INFO & HELP'),
     wellPanel(
       h4('HOW TO'),
-      p('Just use the tree to select subsets of genes and pathways.
+      p('Use the tree to select subsets of genes and pathways.
         Not every button works as input for every plot, just play around.'),
       h4('DATA AND REFERENCES'),
-      p('The study presenting the underlying data for this app is currently under revision.'),
-      p('The source code for this R shiny app is available on ', 
-        a(href = 'https://github.com/m-jahn', target = '_blank', 'github/m-jahn')
+      p('The CRISPRi library in Synechocystis was published as ',
+        a(href = 'https://www.nature.com/articles/s41467-020-15491-7', target = '_blank', 'Yao et al., Nature Communications, 2020'), '.'
+      ),
+      p('The transposon mutant library paper for Cupriavidus necator is currently under revision. Preprint is available as ',
+        a(href = 'https://www.biorxiv.org/content/10.1101/2021.03.21.436304v1', target = '_blank', 'Jahn et al., BioRxiv.org, 2021'), '.'
+      ),
+      p('The source code for this R shiny app is available at ', 
+        a(href = 'https://github.com/m-jahn/ShinyLib', target = '_blank', 'github/m-jahn'), '.'
       ),
       h4('CONTACT'),
-      p('For questions or reporting issues, contact 
-        Michael Jahn, Science For Life Lab - Royal Technical University (KTH), Stockholm'), 
-      p(
-        a(href ='mailto:michael.jahn@scilifelab.se', target = '_blank', 'email: Michael Jahn')
+      p('For questions or reporting issues, contact Michael Jahn, Science 
+        For Life Lab - Royal Technical University (KTH), Stockholm',
+        a(href ='mailto:michael.jahn@scilifelab.se', target = '_blank', 'michael.jahn@scilifelab.se')
       )
     )
   )
@@ -122,6 +126,50 @@ methbox <- function(width = 6) {
       '),
       p('Differential fitness between for example two (light) conditions L300, L100 
       was calculated as F = FL300-FL100.')
+    ),
+    wellPanel(
+      h4('The Cupriavidus transposon knockout library'),
+      p('We created a transposon knockout library in the lithoautotrophic model bacterium Cupriavidus 
+        necator. The transposon library was conjugated from a recombinant E. coli strain; transposons
+        will integrate randomly into the genome and in many cases knockout a gene by disrupting the ORF
+        through a large insertion. This library is more advanced than previous transposon libraries
+        because transposons are barcoded by a random 20 nucleotide sequence stretch. In order to 
+        investigate fitness of knock out mutants, it is only necessary to sequence the 20 nt barcode
+        instead of an entire fragmented genome.'),
+      h4('Creation of barcoded C. necator transposon library'),
+      p('The transposon library was prepared according to the RB-TnSeq workflow described in Wetmore
+        et al., 2015. Briefly, C. necator H16 wild type was conjugated with an E. coli APA766 donor
+        strain containing a barcoded transposon library. The strain is auxotrophic for DAP, the L-Lysin
+        precursor 2,6-diamino-pimelate, to allow for counter selection. Cultures of E. coli 
+        APA766 and C. necator H16 were prepared, cells were harvested by centrifugation, cell pelletes 
+        were washed and then mixed and plated together on 25 cm x 25 cm large trays with LB agar 
+        supplemented with 0.4 mM DAP. For conjugation, plates were incubated overnight at 30°C. 
+        After conjugation, cells were harvested and plated again on selection plates with LB agar 
+        supplemented with 100 µg/mL kanamycin, without DAP. After colonies of sufficient size appeared, 
+        transformants were harvested, diluted to an appropriate cell density immediately frozen at -80°C.'),
+      h4('Mapping of transposon mutants (TnSeq)'),
+      p('To map barcodes to transposon insertion sites on the genome, the genomic DNA of the mutant library
+        has to be fragmented, transposon containing fragments enriched, and sequenced using NG sequencing. 
+        Briefly, DNA was extracted from a mutant library culture using a spin column extraction kit.
+        Genomc DNA was fragmented into 300 bp fragments using an ME220 focused ultrasonicator (Covaris).
+        Library preparation of gDNA fragments followed the protocol of the NEBNext Ultra II DNA Library 
+        Prep Kit. An extra purification step using streptavidin beads in combination with a 30 cycle PCR 
+        amplification with biotinylated primers was performed to enrich transposon containing fragments.
+        The prepared gDNA amplicons were sequenced using a NextSeq 500/550 Mid Output Kit v2.5 150 Cycles
+        (Illumina) run on a NextSeq 550 instrument. Reads containing barcodes and genomic DNA fragments 
+        were mapped to the C. necator genome following the protocol from Wetmore et al., 2015. 
+        The automatic pipeline for TnSeq data analysis is available at https://github.com/m-jahn/TnSeq-pipe.'),
+      h4('Gene fitness analysis (BarSeq)'),
+      p('Gene fitness can be determined from the depletion (lower frequency) or enrichment (higher frequency)
+        of barcode reads for the respective knockout mutants. Amplification of the barcodes from genomic 
+        DNA using standard PCR from isolated genomc DNA. Amplified DNA samples were then pooled 
+        with 40 ng from up to 36 different samples, run on an agarose gel and the main band extracted from the
+        gel. The barcode library was then diluted, denatured and sequenced using a NextSeq 500/550 High Output 
+        Kit v2.5 (75 Cycles) (Illumina) run on a NextSeq 550 instrument. A pipeline from Wetmore et al. was 
+        adapted to trim and filter reads, extract barcodes, and summarize read counts per barcode.
+        Fitness score calculation based on the log fold change of read count per barcode over time was 
+        implemented as an R script. The automatic pipeline for BarSeq analysis is available at 
+        https://github.com/Asplund-Samuelsson/rebar.')
     )
   )
 }
@@ -130,14 +178,11 @@ help_dotplot <- function() {
   tags$body(
     h4('About this page'),
     tags$ul(
-      tags$li('This plots shows enrichment or depletion of two sgRNAs per gene over time (default)'),
-      tags$li('Filter data by selecting genes of interest from the tree'), 
+      tags$li('This plots shows enrichment or depletion of transposon insertion or sgRNA repression mutants'),
+      tags$li('Filter data by selecting genes of interest from the tree'),
       tags$li('Filter data by condition, induction, or time point'),
-      tags$li('You can also choose other ways to group variables (change color coding) or
-        "condition" the data (change panels)'),
-      tags$li('You can export results in three ways: save .png image directly by right
-        clicking into the plot, save .svg vector graphic using the "Download" button, or
-        save table for the selected conditions from the TABLE panel')
+      tags$li('Choose other ways to group variables (change color coding) or
+        "condition" the data (change panels)')
     )
   )
 }
@@ -146,15 +191,10 @@ help_heatmap <- function() {
   tags$body(
     h4('About this page'),
     tags$ul(
-      tags$li('This plots shows enrichment or depletion of genes over time'),
-      tags$li('In contrast to a dot plot, values from several sgRNAs or conditions 
-        per gene are averaged.'),
-      tags$li('Use the "Grouping" option to change panel variables (default: induction)'),
+      tags$li('This plots shows enrichment or depletion of mutants over time'),
+      tags$li('Values from several sgRNAs or conditions per gene are averaged.'),
       tags$li('Filter data by selecting genes of interest from the tree'), 
-      tags$li('Filter data by condition, induction, or time point'),
-      tags$li('You can export results in three ways: save .png image directly by right
-        clicking into the plot, save .svg vector graphic using the "Download" button, or
-        save table for the selected conditions from the TABLE panel')
+      tags$li('Filter data by condition, induction, or time point')
     )
   )
 }
@@ -163,16 +203,11 @@ help_fitness <- function() {
   tags$body(
     h4('About this page'),
     tags$ul(
-      tags$li('This plots shows the average fitness score per sgRNA'),
-      tags$li('Fitness can only be plotted for one, or for two conditions against each other'),
-      tags$li('Fitness was calculated as area under the curve of log2 FC over cell generations 
-        (normalized by number of generations). Selection of time points has no effect'),
-      tags$li('The "Grouping" option has only limited functionality; grouping by condition is not allowed'),
+      tags$li('This plots shows the average fitness score per gene/sgRNA'),
+      tags$li('Fitness can only be plotted for one or two selected conditions'),
+      tags$li('Only the latest time point is used, selecting others makes no difference'),
       tags$li('Filter data by selecting genes of interest from the tree'), 
-      tags$li('Filter data by condition or induction'),
-      tags$li('You can export results in three ways: save .png image directly by right
-        clicking into the plot, save .svg vector graphic using the "Download" button, or
-        save table for the selected conditions from the TABLE panel')
+      tags$li('Filter data by condition or induction')
     )
   )
 }
