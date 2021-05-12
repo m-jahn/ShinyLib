@@ -3,4 +3,3 @@ rsconnect/*
 .Rproj.user
 *.Rproj
 R/trim_data.R
-data/CN_BarSeq_raw.csv

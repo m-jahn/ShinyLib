@@ -12,11 +12,14 @@ tree:
 data:
   condition:
     values:
-      - continuous
-      - short pulse
-      - long pulse
+      - fructose - continuous
+      - fructose - pulse
+      - formate - continuous
+      - formate - pulse
+      - succinate - continuous
+      - succinate - pulse
     selected:
-      - continuous
+      - fructose - continuous
   timepoint:
     values:
       - 0
@@ -32,7 +35,6 @@ plotting:
   x_vars:
     - timepoint
     - condition
-    - induction
     - locus_tag
     - gene_name
     - Process
@@ -42,7 +44,7 @@ plotting:
     - fold_change
     - t_stat
     - counts
-    - Strains_per_gene
+    - strains_per_gene
   cond_vars:
     - gene_name
     - locus_tag
@@ -63,7 +65,6 @@ default:
     - by cond. variable
     - by X variable
     - by Y variable
-    - by induction
     - none
   plot_type:
     - points and lines
