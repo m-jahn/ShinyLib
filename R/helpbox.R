@@ -6,11 +6,13 @@ helpbox <- function(width = 6) {
       p('Use the tree to select subsets of genes and pathways.
         Not every button works as input for every plot, just play around.'),
       h4('DATA AND REFERENCES'),
-      p('The CRISPRi library in Synechocystis was published as ',
+      p('The CRISPRi library V1 for Synechocystis was published as ',
         a(href = 'https://www.nature.com/articles/s41467-020-15491-7', target = '_blank', 'Yao et al., Nature Communications, 2020'), '.'
       ),
-      p('The transposon mutant library paper for Cupriavidus necator is currently under revision. Preprint is available as ',
-        a(href = 'https://www.biorxiv.org/content/10.1101/2021.03.21.436304v1', target = '_blank', 'Jahn et al., BioRxiv.org, 2021'), '.'
+      p('The CRISPRi library V2 for Synechocystis is currently prepared for publication.',
+      ),
+      p('The transposon mutant library paper for Cupriavidus necator was published as ',
+        a(href = 'https://elifesciences.org/articles/69019', target = '_blank', 'Jahn et al., eLife, 2021'), '.'
       ),
       p('The source code for this R shiny app is available at ', 
         a(href = 'https://github.com/m-jahn/ShinyLib', target = '_blank', 'github/m-jahn'), '.'
@@ -100,32 +102,30 @@ methbox <- function(width = 6) {
         cultivations described in this work were performed as 4 independent replicates.
       '),
       h4('Statistical analysis of NGS data'),
-      p('All analyses related to the initial publication of this library were 
-        performed using the R programming language and are documented in 
-        R markdown notebooks available at https://m-jahn.github.io/. Sequencing data were 
-        processed as follows: Different sequencing runs were merged into a single master table. 
-        For simplicity, harvesting time points 12 and 30 days for the sodium chloride condition 
-        (NACL) were re-labelled as 16 and 32 days to correspond to time points of all other samples. 
-        This did not influence the calculation of generation time or fitness score, and was done 
-        only to display these samples along with corresponding L-lactate samples. The R package 
-        DESeq2 (Love et al., 2014) was used to determine fold changes between conditions as well as 
+      p('Fastq files with sequencing reads were processed using the bash pipeline
+        available at https://github.com/m-jahn/CRISPRi-lib-pipe. Briefly, reads were trimmed
+        according to quality score using sickle, mapped to the reference fasta file using bowtie2,
+        and summarized to read counts using samtools.
+        The R package DESeq2 (Love et al., 2014) was used to determine fold changes between conditions as well as 
         significance metrics (multiple hypothesis adjusted p-value, Benjamini-Hochberg procedure). 
         Determination of fold change and significance was based on aggregating 4 independent biological 
         replicates for all cultivations. Gene-wise annotation was added based on Uniprot 
-        (IDs, protein properties, GO terms) and CyanoBase (functional categories). Altogether 7,119 
-        unique sgRNAs corresponding to 3,541 unique genes (without non-coding RNAs) were included in the 
-        analysis.'),
+        (IDs, protein properties, GO terms) and CyanoBase (functional categories).
+        Detailed analysis of the CRISPRi library V1 and V2 was performed using R and all steps
+        are documented in Rmd notebooks available at https://github.com/m-jahn/R-notebook-crispri-lib.'),
       h4('Calculation of fitness scores'),
       p('The gradual, sgRNA-mediated depletion of clones from the library allows 
         estimation of the contribution to cellular fitness for each individual gene. 
-        Here, we defined the fitness F of a mutant as the area under the curve (AUC) for log2 
-        fold change sgRNA abundance (log2 FC) at a number of generations (ngen) since induction, 
+        Here, we defined the fitness F of an sgRNA mutant as the area under the curve (AUC) for log2 
+        fold change sgRNA abundance (log2 FC) at a number of generations (n_gen) since induction, 
         normalized by maximum generations.
       '),
-      p('F = AUC (ngen, log 2FC) / max(ngen)
+      p('F = AUC(n_gen, log2FC) / max(n_gen)
       '),
-      p('Differential fitness between for example two (light) conditions L300, L100 
-      was calculated as F = FL300-FL100.')
+      p('For the CRISPRi library V2, gene fitness was aggregated from the log2FC of up to 5
+        sgRNAs targeting a gene. Fitness was calculated as above with the difference that
+        all sgRNAs of a gene were summarized to the weighted mean of log2FC. Weights were the correlation
+        coefficient and the repression strength of each sgRNA multiplied with each other (min = 0, max = 1).')
     ),
     wellPanel(
       h4('The Cupriavidus transposon knockout library'),
