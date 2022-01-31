@@ -48,7 +48,8 @@ plot_fitness <- function(
           col = ifelse(theme == "ggplot2", "white", grey(0.9)))
         panel.abline(v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.densityplot(x, lwd = 2, ...)
-        latticetools::panel.directlabel(x, rep(0, length(x)), labels = labels, 
+        latticetools::panel.directlabels(x, rep(0, length(x)), labels = labels,
+          positioning = "ggrepel",
           x_boundary = c(-Inf, -2), draw_box = TRUE, cex = 0.5, 
           box_fill = grey(0.9, 0.5), box_line = TRUE, ...)
       }
@@ -68,7 +69,8 @@ plot_fitness <- function(
         panel.abline(h = 0, v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.abline(coef = c(0, 1), lty = 2, lwd = 2, col = grey(0.6))
         panel.xyplot(x, y, ...)
-        latticetools::panel.directlabel(x, y, labels = labels,
+        latticetools::panel.directlabels(x, y, labels = labels,
+          positioning = "ggrepel",
           x_boundary = c(-Inf, -1), y_boundary = c(-Inf, -1),
           draw_box = TRUE, cex = 0.5, box_fill = grey(0.9, 0.5), 
           box_line = TRUE, ...)
