@@ -71,10 +71,10 @@ default:
     - ggplot1
     - ggplot2
   grouping:
+    - by condition
     - by cond. variable
     - by X variable
     - by Y variable
-    - by condition
     - none
   plot_type:
     - points and lines

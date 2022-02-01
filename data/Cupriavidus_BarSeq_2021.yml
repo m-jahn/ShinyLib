@@ -19,7 +19,9 @@ data:
       - succinate - continuous
       - succinate - pulse
     selected:
-      - fructose - continuous
+      - fructose - pulse
+      - formate - pulse
+      - succinate - pulse
   timepoint:
     values:
       - 0
