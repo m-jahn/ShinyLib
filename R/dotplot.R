@@ -41,25 +41,25 @@ plot_dotplot <- function(
     logfun(get(y)) ~ factor(get(x)) | factor(get(cond_var)),
     data,
     groups = {if (is.null(groups)) NULL else factor(get(groups))},
-    par.settings = theme, 
+    par.settings = theme,
     layout = layout,
     as.table = TRUE,
     scales = list(alternating = FALSE, x = list(rot = rot_X_label)),
-    xlab = x, ylab = paste0(y, " (", input$UserLogY, ")"), 
-    type = "l", 
+    xlab = x, ylab = paste0(y, " (", input$UserLogY, ")"),
+    type = "l",
     auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
     panel = function(x, y, subscripts = NULL, groups = NULL, ...) {
-      panel.grid(h = -1, v = -1, 
-        col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+      panel.grid(h = -1, v = -1,
+        col = ifelse(grepl("ggplot", input$UserTheme), "white", grey(0.9)))
       if (type %in% c("p", "b"))
         panel.xyplot(x, y, subscripts = subscripts, groups = groups, type = "p")
       panel.superpose(x, y, subscripts = subscripts, groups = groups, ...)
     }, panel.groups = function(x, y, ...) {
       if (type %in% c("l", "b")) {
-        panel.xyplot(unique(x), 
+        panel.xyplot(unique(x),
           tapply(y, x, function(x) mean(x, na.rm = TRUE)), ...)
       }
-    } 
+    }
   )
   
   # optional addition of error margins, for mean, median, and mean mass 
@@ -67,19 +67,19 @@ plot_dotplot <- function(
   # for fold change we use confidence interval
   if (plot_error) {
     
-    plot <- plot + 
+    plot <- plot +
     as.layer(
       xyplot(
         logfun(get(y)*(1+get(error))) +
         logfun(get(y)*(1-get(error))) ~
         factor(get(x)) | factor(get(cond_var)), data,
         panel = function(x, y, ...) {
-          panel.segments(x0 = as.numeric(x), x1 = as.numeric(x), 
-            y0 = y[1:(length(y)/2)], y1 = y[(length(y)/2+1):length(y)], 
+          panel.segments(x0 = as.numeric(x), x1 = as.numeric(x),
+            y0 = y[1:(length(y)/2)], y1 = y[(length(y)/2+1):length(y)],
             col = grey(0.6, alpha = 0.3), lwd = 1.5)
           panel.key(
             labels = paste("+/-", error),
-            which.panel = 1, corner = c(0.05, 0.05), 
+            which.panel = 1, corner = c(0.05, 0.05),
             lines = FALSE, points = FALSE, col = grey(0.6), cex = 0.7
           )
         }

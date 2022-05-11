@@ -7,8 +7,8 @@
 #' @import latticeExtra
 #' @export
 # ------------------------------------------------------------------------------
-custom.ggplot <- function() {
-  theme <- latticeExtra::ggplot2like()
+custom.ggplot <- function(n_colors = 9) {
+  theme <- latticeExtra::ggplot2like(n = n_colors)
   theme$axis.line$col <- "white"
   theme$axis.line$lwd <- 2
   theme$strip.border$col <- "white"
@@ -16,24 +16,22 @@ custom.ggplot <- function() {
   theme
 }
 
-
 #' Custom grey lattice theme
 #' 
 #' Custom themes for lattice plots
 #' 
 #' @export
 # ------------------------------------------------------------------------------
-custom.lattice <- function() {
-  
-  gradient <- c(
-    "#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
-    "#FDAE61", "#F46D43", "#D53E4F", "#9E0142")
+custom.lattice <- function(n_colors = 9) {
+  gradient <- colorRampPalette(colors =
+    c("#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4", "#E6F598",
+      "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"
+    ))(n_colors)
   theme <- latticeExtra::custom.theme(
     symbol = gradient,
     fill = gradient,
     region = gradient,
     reference = 1, bg = 0, fg = 1)
-  theme$superpose.symbol$fill <- c("#00526D", colorspace::rainbow_hcl(n = 6, c = 90, l = 50))
   theme$superpose.symbol$pch <- 19
   theme$superpose.symbol$cex <- 0.7
   theme$superpose.line$lwd <- 2

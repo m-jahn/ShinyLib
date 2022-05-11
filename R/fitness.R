@@ -45,12 +45,12 @@ plot_fitness <- function(
       auto.key = {if (is.null(ncol_legend)) NULL else list(columns = ncol_legend)},
       panel = function(x, labels, ...) {
         panel.grid(h = -1, v = -1,
-          col = ifelse(theme == "ggplot2", "white", grey(0.9)))
+          col = ifelse(grepl("ggplot", input$UserTheme), "white", grey(0.9)))
         panel.abline(v = 0, lty = 2, lwd = 2, col = grey(0.6))
         panel.densityplot(x, lwd = 2, ...)
         latticetools::panel.directlabels(x, rep(0, length(x)), labels = labels,
           positioning = "ggrepel",
-          x_boundary = c(-Inf, -2), draw_box = TRUE, cex = 0.5, 
+          x_boundary = c(-Inf, -2), draw_box = TRUE, cex = 0.5,
           box_fill = grey(0.9, 0.5), box_line = TRUE, ...)
       }
     )
@@ -72,7 +72,7 @@ plot_fitness <- function(
         latticetools::panel.directlabels(x, y, labels = labels,
           positioning = "ggrepel",
           x_boundary = c(-Inf, -1), y_boundary = c(-Inf, -1),
-          draw_box = TRUE, cex = 0.5, box_fill = grey(0.9, 0.5), 
+          draw_box = TRUE, cex = 0.5, box_fill = grey(0.9, 0.5),
           box_line = TRUE, ...)
       }
     )

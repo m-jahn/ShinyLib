@@ -107,9 +107,11 @@ server <- function(input, output) {
   
   # select theme
   theme <- reactive({
-    if (input$UserTheme == "ggplot1") ggplot2like()
-    else if (input$UserTheme == "ggplot2") custom.ggplot()
-    else if (input$UserTheme == "lattice grey") custom.lattice()
+    #n_groups <- length(unique(data_filt()[[grouping()]]))
+    n_groups = 9
+    if (input$UserTheme == "ggplot1") ggplot2like(n = n_groups)
+    else if (input$UserTheme == "ggplot2") custom.ggplot(n_groups)
+    else if (input$UserTheme == "lattice grey") custom.lattice(n_groups)
     else if (input$UserTheme == "lattice blue") theEconomist.theme()
   })
   
