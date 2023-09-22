@@ -9,7 +9,8 @@ helpbox <- function(width = 6) {
       p('The CRISPRi library V1 for Synechocystis was published as ',
         a(href = 'https://www.nature.com/articles/s41467-020-15491-7', target = '_blank', 'Yao et al., Nature Communications, 2020'), '.'
       ),
-      p('The CRISPRi library V2 for Synechocystis is currently prepared for publication.',
+      p('The CRISPRi library V2 for Synechocystis was published as ',
+        a(href = 'https://pubmed.ncbi.nlm.nih.gov/37494719/', target = '_blank', 'Miao & Jahn et al., The Plant Cell, 2023'), '.'
       ),
       p('The transposon mutant library paper for Cupriavidus necator was published as ',
         a(href = 'https://elifesciences.org/articles/69019', target = '_blank', 'Jahn et al., eLife, 2021'), '.'
@@ -18,9 +19,9 @@ helpbox <- function(width = 6) {
         a(href = 'https://github.com/m-jahn/ShinyLib', target = '_blank', 'github/m-jahn'), '.'
       ),
       h4('CONTACT'),
-      p('For questions or reporting issues, contact Michael Jahn, Science 
-        For Life Lab - Royal Technical University (KTH), Stockholm',
-        a(href ='mailto:michael.jahn@scilifelab.se', target = '_blank', 'michael.jahn@scilifelab.se')
+      p('For questions or reporting issues, contact Michael Jahn, Max Planck Unit for the science 
+        of pathogens (MPUSP), Berlin',
+        a(href ='mailto:jahn@mpusp.mpg.de', target = '_blank', 'jahn@mpusp.mpg.de')
       )
     )
   )
@@ -35,11 +36,7 @@ fundbox <- function(width = 6) {
         tags$li('Swedish Foundation For Strategic Research - SSF'), 
         tags$li('Swedish Research Council for Environment, 
           Agricultural Sciences and Spatial Planning - Formas')
-      )#,
-      #p(''),
-      #fluidRow(img(src = '../formas_logo.png', width = '200px')),
-      #p(''),
-      #fluidRow(img(src = '../SSF_logo.png', width = '120px'))
+      )
     )
   )
 }
