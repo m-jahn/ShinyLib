@@ -1,0 +1,93 @@
+# variables to generate gene tree
+tree:
+  levels:
+    - Process
+    - Pathway
+    - gene_name
+    - locus_tag
+  gene_level:
+    - gene_name
+
+# main parameters to filter data
+data:
+  condition:
+    values:
+      - hydrogen - pulse
+      - nitrate - continuous
+      - nitrate - pulse
+      - fructose - continuous
+      - fructose - pulse
+      - formate - continuous
+      - formate - pulse
+      - succinate - continuous
+      - succinate - pulse
+    selected:
+      - hydrogen - pulse
+      - nitrate - pulse
+      - formate - pulse
+  timepoint:
+    values:
+      - 0
+      - 4
+      - 8
+      - 12
+      - 16
+    selected:
+      - 0
+      - 4
+      - 8
+      - 12
+      - 16
+
+# variables for plotting data
+plotting:
+  x_vars:
+    - timepoint
+    - condition
+    - locus_tag
+    - gene_name
+    - Process
+    - Pathway
+  y_vars:
+    - fitness_score
+    - fold_change
+    - t_stat
+    - counts
+    - strains_per_gene
+  cond_vars:
+    - gene_name
+    - locus_tag
+    - timepoint
+    - condition
+    - Process
+    - Pathway
+
+# default plot parameters
+default:
+  theme:
+    - lattice grey
+    - lattice blue
+    - ggplot1
+    - ggplot2
+  grouping:
+    - by condition
+    - by cond. variable
+    - by X variable
+    - by Y variable
+    - none
+  plot_type:
+    - points and lines
+    - points
+    - lines
+  y_scale:
+    - linear
+    - log 2
+    - log 10
+    - log e
+  fitness:
+    x_var: gene_name
+    y_var: fitness_score
+    comparison: condition
+    filter:
+      var: timepoint
+      val: 8
