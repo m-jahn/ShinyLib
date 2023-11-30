@@ -7,12 +7,19 @@ R Shiny based interface for browsing fitness data from transposon or CRISPRi lib
 
 ### Related publications
 
-- Yao et al., *Pooled CRISPRi screening of the cyanobacterium Synechocystis sp PCC 6803 for enhanced industrial phenotypes*. Nature Communications, **2020**. [Link](https://www.nature.com/articles/s41467-020-15491-7)
-- Jahn et al., *Protein allocation and utilization in the versatile chemolithoautotroph Cupriavidus necator*. BioRxiv.org. **2021**. Submitted manuscript. [Link]()
+- Jahn et al., *The energy metabolism of the knallgas bacterium Cupriavidus necator in different trophic conditions*, **2023**. *In preparation*.
+- Miao & Jahn et al., *CRISPR interference screens reveal growth–robustness tradeoffs in Synechocystis sp. PCC 6803 across growth conditions*, The Plant Cell, **2023**.
+[Link](https://dx.doi.org/10.1093/plcell/koad208)
+- Jahn et al., *Protein allocation and utilization in the versatile chemolithoautotroph Cupriavidus necator*, eLife, **2021**.
+[Link](https://elifesciences.org/articles/69019)
+- Yao et al., *Pooled CRISPRi screening of the cyanobacterium Synechocystis sp PCC 6803 for enhanced industrial phenotypes*,
+Nature Communications, **2020**.
+[Link](https://www.nature.com/articles/s41467-020-15491-7)
+
 
 ### Getting started
 
-Simply run the app at https://m-jahn.shinyapps.io/ShinyLib/!
+Simply open the app at https://m-jahn.shinyapps.io/ShinyLib/!
 
 If you want to *run ShinyLib locally*, you need to have R (optionally also Rstudio) and some of its libraries installed:
 
@@ -29,11 +36,25 @@ If you want to *run ShinyLib locally*, you need to have R (optionally also Rstud
 - `configr`
 
 Open `global.R`, `server.R` or `ui.R` in RStudio and push the `Run App` button in Rstudio, done!
-You can also run the app from R console, just call `runApp("path-to-ShinyLib)`.
+You can also run the app from R console, just call `runApp("path-to-ShinyLib")`.
 
-### R Shiny based browser for transposon or CRISPRi mutant libraries
+### Input data
 
-ShinyLib is an app for exploration of gene-centered data from enrichment or depletion studies. Such a library with thousands of mutants can be grown in competition experiments, leading to the depletion of growth-inhibited mutants and enrichment of faster growing mutants. By extracting the DNA and sequencing the barcode/sgRNA of the mutant population, we can investigate which genes are _essential_ or contribute to _fitness_ for the selected conditions.
+- `ShinyLib` uses fold change and fitness data derived from next generation sequencing
+- can be easily customized for use with other library-type data
+- can be deployed on a shiny server for web-access
+- current data set:
+
+| name | year | organism | screening  | size | conditions |
+| ---- | ---- | -------- | ---- | --------- | ---------- |
+| `CRISPRi_library_2019` | 2019 | *Synechocystis* | CRISPRi | 10,000 | low light, high light, day-night |
+| `CRISPRi_library_2022` | 2022 | *Synechocystis* | CRISPRi | 22,000 | 11 light and CO2 limitations |
+| `Cupriavidus_BarSeq_2021` | 2021 | *Cupriavidus* | BarSeq transposon | 60,000 | various carbon sources |
+| `Cupriavidus_BarSeq_2023` | 2023 | *Cupriavidus* | BarSeq transposon | 60,000 | lithoautotrophy and nitrate respiration |
+
+### Browsing transposon or CRISPRi mutant libraries
+
+**ShinyLib** is an R Shiny based app for exploration of gene-centered data from enrichment or depletion studies. Such a library with thousands of mutants can be grown in competition experiments, leading to the depletion of growth-inhibited mutants and enrichment of faster growing mutants. By extracting the DNA and sequencing the barcode/sgRNA of the mutant population, we can investigate which genes are _essential_ or contribute to _fitness_ for the selected conditions.
 
 Features:
 
@@ -55,9 +76,3 @@ ShinyLib consists of a set of R scripts that determine the functionality.
 - `custom_themes.R` contains a set of customized lattice themes
 - `custom_panel_functions.R` contains a set of custom lattice panel functions
 - `helpbox.R` contains info boxes for help, contact, and background information
-
-### Input data
-
-- ShinyLib uses fold change and fitness data derived from next generation sequencing
-- Can be easily customized for use with other library-type data
-- Can be deployed on a shiny server for web-access
