@@ -7,7 +7,8 @@ R Shiny based interface for browsing fitness data from transposon or CRISPRi lib
 
 ### Related publications
 
-- Jahn et al., *The energy metabolism of the knallgas bacterium Cupriavidus necator in different trophic conditions*, **2023**. *In preparation*.
+- Jahn et al., *The energy metabolism of Cupriavidus necator in different trophic conditions*, Applied and Environmental Microbiology, **2024**.
+[Link](https://journals.asm.org/doi/10.1128/aem.00748-24)
 - Miao & Jahn et al., *CRISPR interference screens reveal growth–robustness tradeoffs in Synechocystis sp. PCC 6803 across growth conditions*, The Plant Cell, **2023**.
 [Link](https://dx.doi.org/10.1093/plcell/koad208)
 - Jahn et al., *Protein allocation and utilization in the versatile chemolithoautotroph Cupriavidus necator*, eLife, **2021**.
@@ -28,7 +29,7 @@ If you want to *run ShinyLib locally*, you need to have R (optionally also Rstud
 - `shinyTree`
 - `lattice`
 - `latticeExtra`
-- `latticetools` (from https://github.com/m-jahn/lattice-tools)
+- `latticetools` [on github](https://github.com/m-jahn/lattice-tools)
 - `directlabels`
 - `tidyr`
 - `dplyr`
@@ -43,14 +44,15 @@ You can also run the app from R console, just call `runApp("path-to-ShinyLib")`.
 - `ShinyLib` uses fold change and fitness data derived from next generation sequencing
 - can be easily customized for use with other library-type data
 - can be deployed on a shiny server for web-access
-- current data set:
+- current data sets:
 
 | name | year | organism | screening  | size | conditions |
 | ---- | ---- | -------- | ---- | --------- | ---------- |
-| `CRISPRi_library_2019` | 2019 | *Synechocystis* | CRISPRi | 10,000 | low light, high light, day-night |
-| `CRISPRi_library_2022` | 2022 | *Synechocystis* | CRISPRi | 22,000 | 11 light and CO2 limitations |
-| `Cupriavidus_BarSeq_2021` | 2021 | *Cupriavidus* | BarSeq transposon | 60,000 | various carbon sources |
 | `Cupriavidus_BarSeq_2023` | 2023 | *Cupriavidus* | BarSeq transposon | 60,000 | lithoautotrophy and nitrate respiration |
+| `Cupriavidus_BarSeq_2021` | 2021 | *Cupriavidus* | BarSeq transposon | 60,000 | various carbon sources |
+| `CRISPRi_library_2022` | 2022 | *Synechocystis* | CRISPRi | 22,000 | 11 light and CO2 limitations |
+| `CRISPRi_library_2019` | 2019 | *Synechocystis* | CRISPRi | 10,000 | low light, high light, day-night |
+
 
 ### Browsing transposon or CRISPRi mutant libraries
 

@@ -9,11 +9,14 @@ helpbox <- function(width = 6) {
       p('The CRISPRi library V1 for Synechocystis was published as ',
         a(href = 'https://www.nature.com/articles/s41467-020-15491-7', target = '_blank', 'Yao et al., Nature Communications, 2020'), '.'
       ),
-      p('The CRISPRi library V2 for Synechocystis was published as ',
+      p('The CRISPRi library V2 for Synechocystis was published in ',
         a(href = 'https://pubmed.ncbi.nlm.nih.gov/37494719/', target = '_blank', 'Miao & Jahn et al., The Plant Cell, 2023'), '.'
       ),
-      p('The transposon mutant library paper for Cupriavidus necator was published as ',
+      p('The transposon mutant library paper for Cupriavidus necator was published in ',
         a(href = 'https://elifesciences.org/articles/69019', target = '_blank', 'Jahn et al., eLife, 2021'), '.'
+      ),
+      p('The study about the energy metabolism of Cupriavidus was published in ',
+        a(href = 'https://journals.asm.org/doi/10.1128/aem.00748-24', target = '_blank', 'Jahn et al., AEM, 2024'), '.'
       ),
       p('The source code for this R shiny app is available at ', 
         a(href = 'https://github.com/m-jahn/ShinyLib', target = '_blank', 'github/m-jahn'), '.'
@@ -30,9 +33,11 @@ helpbox <- function(width = 6) {
 fundbox <- function(width = 6) {
   column(width = width, 
     wellPanel(
-      h4('FUNDING AND OTHER RESOURCES'),
-      p('We gratefully acknowledge funding of this study by the following organisations:'),
+      h4('FUNDING'),
+      p('We gratefully acknowledge funding by the following organisations:'),
       tags$ul(
+        tags$li('Max Planck Society, Germany'),
+        tags$li('Royal Institute of Technology (KTH), Sweden'),
         tags$li('Swedish Foundation For Strategic Research - SSF'), 
         tags$li('Swedish Research Council for Environment, 
           Agricultural Sciences and Spatial Planning - Formas')
