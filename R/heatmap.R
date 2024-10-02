@@ -21,8 +21,8 @@ plot_heatmap <- function(
   
   # prepare data: heatmap can not display replicate points per
   # condition -> need to aggregate replicate values as mean or median
-  data <- group_by_at(data, vars(c(x, y, cond_var))) %>%
-    summarize_at(vars(z), .funs = function(x) mean(x, na.rm = TRUE))
+  data <- group_by(data, across(c(x, y, cond_var))) %>%
+    summarize(across(z, function(x) mean(x, na.rm = TRUE)), .groups = "drop")
   
   
   # use formula interface to plot with and without conditioning
