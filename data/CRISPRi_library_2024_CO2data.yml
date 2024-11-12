@@ -1,0 +1,85 @@
+# variables to generate gene tree
+tree:
+  levels:
+    - process
+    - pathway
+    - gene_name
+    - protein
+  gene_level:
+    - gene_name
+
+# main parameters to filter data
+data:
+  condition:
+    values:
+      - "CO2_30percent"
+      - "CO2_4percent"
+    selected:
+      - "CO2_30percent"
+      - "CO2_4percent"
+  time:
+    values:
+      - 0
+      - 4
+      - 8
+      - 10
+    selected:
+      - 0
+      - 4
+      - 8
+      - 10
+
+# variables for plotting data
+plotting:
+  x_vars:
+    - time
+    - condition
+    - sgRNA_target
+    - gene_name
+    - locus
+    - protein
+    - process
+    - pathway
+  y_vars:
+    - FoldChange
+    - fitness
+    - baseMean
+    - padj
+  cond_vars:
+    - sgRNA_target
+    - time
+    - condition
+    - locus
+    - protein
+    - process
+    - pathway
+
+# default plot parameters
+default:
+  theme:
+    - lattice grey
+    - lattice blue
+    - ggplot1
+    - ggplot2
+  grouping:
+    - by condition
+    - by cond. variable
+    - by X variable
+    - by Y variable
+    - none
+  plot_type:
+    - points and lines
+    - points
+    - lines
+  y_scale:
+    - log 2
+    - log 10
+    - log e
+    - linear
+  fitness:
+    x_var: sgRNA
+    y_var: fitness
+    comparison: condition
+    filter:
+      var: time
+      val: 0
