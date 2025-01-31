@@ -18,6 +18,9 @@ helpbox <- function(width = 6) {
       p('The study about the energy metabolism of Cupriavidus was published in ',
         a(href = 'https://journals.asm.org/doi/10.1128/aem.00748-24', target = '_blank', 'Jahn et al., AEM, 2024'), '.'
       ),
+      p('Screening of the CRISPRi library V2 for Synechocystis at high CO2 feeds was published in ',
+        a(href = 'https://doi.org/10.1007/s00253-025-13416-2', target = '_blank', 'Carrasquer-Alvarez et al., Appl Microbiol Biotechnol, 2025'), '.'
+      ),
       p('The source code for this R shiny app is available at ', 
         a(href = 'https://github.com/m-jahn/ShinyLib', target = '_blank', 'github/m-jahn'), '.'
       ),

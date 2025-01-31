@@ -16,6 +16,8 @@ R Shiny based interface for browsing fitness data from transposon or CRISPRi lib
 - Yao et al., *Pooled CRISPRi screening of the cyanobacterium Synechocystis sp PCC 6803 for enhanced industrial phenotypes*,
 Nature Communications, **2020**.
 [Link](https://www.nature.com/articles/s41467-020-15491-7)
+- Carrasquer-Alvarez et al., *Photosynthesis in *Synechocystis* sp. PCC 6803 is not optimally regulated under very high CO<sub>2</sub>*
+[Link](https://doi.org/10.1007/s00253-025-13416-2)
 
 
 ### Getting started
@@ -52,6 +54,7 @@ You can also run the app from R console, just call `runApp("path-to-ShinyLib")`.
 | `Cupriavidus_BarSeq_2021` | 2021 | *Cupriavidus* | BarSeq transposon | 60,000 | various carbon sources |
 | `CRISPRi_library_2022` | 2022 | *Synechocystis* | CRISPRi | 22,000 | 11 light and CO2 limitations |
 | `CRISPRi_library_2019` | 2019 | *Synechocystis* | CRISPRi | 10,000 | low light, high light, day-night |
+| `CRISPRi_library_2024_CO2data` | 2025 | *Synechocystis* | CRISPRi | 22,000 | 2 CO2 conditions |
 
 
 ### Browsing transposon or CRISPRi mutant libraries
